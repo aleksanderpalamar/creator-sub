@@ -1,4 +1,5 @@
 import { ThemeSwitch } from "@/components/theme-switch";
+import { UserNav } from "@/components/user-nav";
 import { authOptions } from "@/utils/authOptions";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -18,15 +19,14 @@ export default async function DashboardLayout({
   return (
     <div className="flex min-h-screen flex-col">
       <header className="stick top-0 z-10 border-b bg-background">
-        <div className="flex h-16 items-center px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center px-4 sm:px-6">
           <h1 className="font-bold text-xl mr-6">CreatorSub</h1>
           <nav className="hidden md:flex flex-1 items-center space-x-4 lg:space-x-6">
             {/*<DashboardNav /> */}
           </nav>
           <div className="ml-auto flex items-center space-x-4">
             <ThemeSwitch />
-            {/* <ModeToggle /> */}
-            {/* <UserNav user={session.user} /> */}
+            <UserNav user={session.user} />
           </div>
         </div>
       </header>
