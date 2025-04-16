@@ -104,7 +104,6 @@ O sistema utiliza NextAuth.js para autenticação, suportando:
 ## 💳 Sistema de Pagamentos
 
 - Integração com PIX para pagamentos
-- Geração automática de códigos PIX
 - Gestão de assinaturas recorrentes
 - Histórico de transações
 
