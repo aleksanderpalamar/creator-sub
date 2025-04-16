@@ -1,17 +1,32 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { SelectTrigger } from "@radix-ui/react-select";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, use, useEffect, useState } from "react";
+import { Separator } from "@/components/ui/separator";
+import { AlertCircle, Eye, EyeOff } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function SettingsPage() {
   const { data: session, update } = useSession();
@@ -21,6 +36,12 @@ export default function SettingsPage() {
   const [pixKey, setPixKey] = useState("");
   const [pixKeyType, setPixKeyType] = useState("");
   const [isCreator, setIsCreator] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
 
   useEffect(() => {
     if (session?.user) {
@@ -29,6 +50,14 @@ export default function SettingsPage() {
       setIsCreator(session.user.isCreator);
     }
   }, [session]);
+
+  useEffect(() => {
+    if (newPassword && confirmPassword && newPassword !== confirmPassword) {
+      setPasswordError("As senhas não coincidem.");
+    } else {
+      setPasswordError("");
+    }
+  }, [newPassword, confirmPassword]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -62,22 +91,69 @@ export default function SettingsPage() {
         },
       });
 
-      toast({
+      toast.success({
         title: "Configurações atualizadas com sucesso.",
         description: "Suas configurações foram atualizadas com sucesso.",
-        type: "success",
       });
 
       router.refresh();
     } catch (error) {
       console.error("Erro ao atualizar configurações:", error);
-      toast({
+      toast.error({
         title: "Erro ao atualizar configurações",
         description:
           error instanceof Error
             ? error.message
             : "Ocorreu um erro ao atualizar suas configurações.",
-        type: "error",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function onSubmitPassword(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (newPassword !== confirmPassword) {
+      setPasswordError("As senhas não coincidem");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/user/change-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          currentPassword,
+          newPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Erro ao alterar senha");
+      }
+
+      toast.success({
+        title: "Senha alterada",
+        description: "Sua senha foi alterada com sucesso",
+      });
+
+      // Limpar campos
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error: any) {
+      console.error(error);
+      toast.error({
+        title: "Erro ao alterar senha",
+        description:
+          error.message || "Ocorreu um erro ao tentar alterar sua senha",
       });
     } finally {
       setIsLoading(false);
@@ -96,45 +172,60 @@ export default function SettingsPage() {
         <TabsList>
           <TabsTrigger value="account">Conta</TabsTrigger>
           <TabsTrigger value="payments">Pagamentos</TabsTrigger>
+          <TabsTrigger value="security">Segurança</TabsTrigger>
           <TabsTrigger value="notifications">Notificações</TabsTrigger>
         </TabsList>
+        {/* Aba de Conta */}
         <TabsContent value="account" className="space-y-4">
           <Card>
-            <CardHeader>
-              <CardTitle>Perfil</CardTitle>
-              <CardDescription>
-                Atualize suas informações de perfil.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Nome</Label>
-                <Input
-                  id="name"
-                  defaultValue={session?.user?.name || ""}
-                  disabled
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  defaultValue={session?.user?.email || ""}
-                  disabled
-                />
-              </div>
-              <div className="flex items-center space-x-2">
-                <Switch
-                  id="creator-mode"
-                  checked={isCreator}
-                  onCheckedChange={setIsCreator}
-                />
-                <Label htmlFor="creator-mode">Modo Criador</Label>
-              </div>
-            </CardContent>
+            <form onSubmit={onSubmit}>
+              <CardHeader>
+                <CardTitle>Perfil</CardTitle>
+                <CardDescription>
+                  Atualize suas informações de perfil e preferências de conta.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Nome</Label>
+                  <Input
+                    id="name"
+                    defaultValue={session?.user?.name || ""}
+                    disabled
+                  />
+                  {/* Explicação sobre campos desabilitados */}
+                  <p className="text-xs text-muted-foreground">
+                    O nome e email são gerenciados pelo provedor de autenticação
+                    e não podem ser alterados aqui.
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    defaultValue={session?.user?.email || ""}
+                    disabled
+                  />
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="creator-mode"
+                    checked={isCreator}
+                    onCheckedChange={setIsCreator}
+                  />
+                  <Label htmlFor="creator-mode">Modo Criador</Label>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button type="submit" disabled={isLoading}>
+                  {isLoading ? "Salvando..." : "Salvar Alterações"}
+                </Button>
+              </CardFooter>
+            </form>
           </Card>
         </TabsContent>
+        {/* Aba de Pagamentos */}
         <TabsContent value="payments" className="space-y-4">
           <Card>
             <form onSubmit={onSubmit}>
@@ -177,6 +268,98 @@ export default function SettingsPage() {
             </form>
           </Card>
         </TabsContent>
+        {/* Aba de Segurança */}
+        {/* Nova Aba de Segurança */}
+        <TabsContent value="security" className="space-y-4">
+          <Card>
+            <form onSubmit={onSubmitPassword}>
+              <CardHeader>
+                <CardTitle>Alterar Senha</CardTitle>
+                <CardDescription>Atualize sua senha para manter sua conta segura.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="current-password">Senha Atual</Label>
+                  <div className="relative">
+                    <Input
+                      id="current-password"
+                      type={showCurrentPassword ? "text" : "password"}
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                    >
+                      {showCurrentPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-2">
+                  <Label htmlFor="new-password">Nova Senha</Label>
+                  <div className="relative">
+                    <Input
+                      id="new-password"
+                      type={showNewPassword ? "text" : "password"}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                    >
+                      {showNewPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="confirm-password">Confirmar Nova Senha</Label>
+                  <Input
+                    id="confirm-password"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </div>
+
+                {passwordError && (
+                  <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{passwordError}</AlertDescription>
+                  </Alert>
+                )}
+
+                <div className="space-y-1">
+                  <p className="text-sm font-medium">Requisitos de senha:</p>
+                  <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
+                    <li>Mínimo de 8 caracteres</li>
+                    <li>Pelo menos uma letra maiúscula</li>
+                    <li>Pelo menos um número</li>
+                    <li>Pelo menos um caractere especial</li>
+                  </ul>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  type="submit"
+                  disabled={isLoading || !currentPassword || !newPassword || !confirmPassword || !!passwordError}
+                >
+                  {isLoading ? "Alterando..." : "Alterar Senha"}
+                </Button>
+              </CardFooter>
+            </form>
+          </Card>
+        </TabsContent>
+        {/* Aba de Notificação */}
         <TabsContent value="notifications" className="space-y-4">
           <Card>
             <CardHeader>
