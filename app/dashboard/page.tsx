@@ -180,7 +180,7 @@ export default async function DashboardPage() {
                 <Link href="/dashboard/plans/new">Criar Nova Assinatura</Link>
               </Button>
               <Button asChild variant="outline" className="w-full">
-                <Link href="/dashboard/plans">Gerenciar Planos</Link>
+                <Link href="/dashboard/plans">Gerenciar Assinaturas</Link>
               </Button>
               <Button asChild variant="outline" className="w-full">
                 <Link href="/dashboard/subscribers">Ver Assinantes</Link>

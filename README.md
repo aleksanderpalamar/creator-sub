@@ -1,36 +1,38 @@
 # Dashboard Content Creator Platform
 
-Uma plataforma moderna para criadores de conteúdo gerenciarem suas assinaturas e assinantes.
+Este projeto é uma solução “tudo‑em‑um” para criadores de conteúdo montarem e gerenciarem seu próprio sistema de assinaturas,
+oferecendo tanto uma área administrativa para o criador quanto uma interface para os assinantes.
 
-## 🌟 Funcionalidades
+### Resumo geral
 
-### Para Criadores de Conteúdo
-- Dashboard personalizado com métricas importantes
-- Gerenciamento de planos de assinatura
-- Visualização de assinantes ativos
-- Integração com pagamentos via PIX
-- Configurações de perfil e conta
-- Sistema de notificações
+    * Plataforma web construída sobre Next.js (App Router)
+    * Permite ao criador:
+      • Definir e editar planos de assinatura (valores, intervalos, descrições)
+      • Visualizar métricas e lista de assinantes ativos
+      • Configurar dados de pagamento (PIX) e notificações
+      • Ajustar perfil, segurança e preferências
+      * Permite ao assinante:
+      • Navegar entre planos disponíveis
+      • Assinar/desassinar com pagamento via PIX
+      • Gerenciar conta (dados pessoais, mudança de senha, notificações)
 
-### Para Assinantes
-- Interface intuitiva para gerenciar assinaturas
-- Visualização de planos disponíveis
-- Pagamento simplificado via PIX
-- Gerenciamento de conta e preferências
 
 ## 🚀 Tecnologias Utilizadas
 
 - **Frontend:**
+
   - Next.js 15+ (App Router)
   - Tailwind CSS
   - Shadcn/ui
 
 - **Backend:**
+
   - Next.js API Routes
   - Prisma ORM
   - SQLite (desenvolvimento)
 
 - **Autenticação:**
+
   - NextAuth.js
   - Credenciais (email/senha)
   - Proteção de rotas
@@ -40,13 +42,24 @@ Uma plataforma moderna para criadores de conteúdo gerenciarem suas assinaturas 
 
 ## 💻 Pré-requisitos
 
-- Node.js 18+ 
+- Node.js 18+
 - npm, yarn, ou pnpm
+
+## Fluxo de uso
+
+   1. Usuário (criador) se cadastra e configura seus planos no dashboard
+   2. Visitante vê planos públicos e escolhe um para assinar
+   3. Pagamento é processado via PIX e webhook notifica o sistema
+   4. Plano ativo e acesso concedido ao assinante; criador visualiza nova assinatura no dashboard
+
+   Em resumo, é uma base pronta para quem quer oferecer conteúdo sob assinatura recorrente, com todo o fluxo de cadastro,
+   autenticação, cobrança e gestão de assinantes já implementado.
 
 ## 🛠️ Configuração do Ambiente
 
 1. Clone o repositório
 2. Instale as dependências:
+
    ```bash
    npm install
    # ou
@@ -57,6 +70,7 @@ Uma plataforma moderna para criadores de conteúdo gerenciarem suas assinaturas 
 
 3. Configure as variáveis de ambiente:
    Crie um arquivo `.env` na raiz do projeto com:
+
    ```
    DATABASE_URL="file:./dev.db"
    NEXTAUTH_SECRET="seu-secret-aqui"
@@ -64,6 +78,7 @@ Uma plataforma moderna para criadores de conteúdo gerenciarem suas assinaturas 
    ```
 
 4. Execute as migrações do banco de dados:
+
    ```bash
    npx prisma migrate dev
    ```
@@ -82,20 +97,19 @@ Acesse [http://localhost:3000](http://localhost:3000) no seu navegador.
 ## 📁 Estrutura do Projeto
 
 ```
-├── app/                  # Rotas e páginas da aplicação
-│   ├── api/             # Rotas da API
-│   ├── dashboard/       # Área do dashboard
-│   ├── login/          # Página de login
-│   └── register/       # Página de registro
-├── components/          # Componentes reutilizáveis
-├── lib/                # Utilitários e configurações
-├── prisma/             # Schema e migrações do banco
-└── types/              # Definições de tipos TypeScript
+  • app/           → rotas e páginas (páginas públicas, dashboard do criador, API endpoints)
+  • components/    → componentes React reutilizáveis (UI, navegação, botões, etc.)
+  • lib/           → configurações e helpers (Prisma, autenticação, utilidades)
+  • prisma/        → schema do banco e migrações
+  • hooks/, context/ → gerenciamento de estado (toasts, tema, modo de usuário)
+  • public/        → assets estáticos (imagens, favicon)
+  • utils/, types/ → funções utilitárias e definições TypeScript
 ```
 
 ## 🔐 Autenticação
 
 O sistema utiliza NextAuth.js para autenticação, suportando:
+
 - Autenticação com email/senha
 - Sessões seguras
 - Proteção de rotas
@@ -110,12 +124,14 @@ O sistema utiliza NextAuth.js para autenticação, suportando:
 ## ⚙️ Configurações Disponíveis
 
 ### Criadores
+
 - Gerenciamento de planos de assinatura
 - Configuração de chave PIX
 - Preferências de notificação
 - Configurações de segurança
 
 ### Assinantes
+
 - Gerenciamento de assinaturas ativas
 - Preferências de conta
 - Configurações de notificação
