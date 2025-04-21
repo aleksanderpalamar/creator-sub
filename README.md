@@ -45,16 +45,6 @@ oferecendo tanto uma área administrativa para o criador quanto uma interface pa
 - Node.js 18+
 - npm, yarn, ou pnpm
 
-## Fluxo de uso
-
-   1. Usuário (criador) se cadastra e configura seus planos no dashboard
-   2. Visitante vê planos públicos e escolhe um para assinar
-   3. Pagamento é processado via PIX e webhook notifica o sistema
-   4. Plano ativo e acesso concedido ao assinante; criador visualiza nova assinatura no dashboard
-
-   Em resumo, é uma base pronta para quem quer oferecer conteúdo sob assinatura recorrente, com todo o fluxo de cadastro,
-   autenticação, cobrança e gestão de assinantes já implementado.
-
 ## 🛠️ Configuração do Ambiente
 
 1. Clone o repositório
@@ -75,6 +65,7 @@ oferecendo tanto uma área administrativa para o criador quanto uma interface pa
    DATABASE_URL="file:./dev.db"
    NEXTAUTH_SECRET="seu-secret-aqui"
    NEXTAUTH_URL="http://localhost:3000"
+   MERCADO_PAGO_ACCESS_TOKEN="seu-access-token-aqui"
    ```
 
 4. Execute as migrações do banco de dados:
@@ -123,6 +114,16 @@ O sistema utiliza NextAuth.js para autenticação, suportando:
 
 ## ⚙️ Configurações Disponíveis
 
+## Fluxo de uso
+
+   1. Usuário (criador) se cadastra e configura seus planos no dashboard
+   2. Visitante vê planos públicos e escolhe um para assinar
+   3. Pagamento é processado via PIX e webhook notifica o sistema
+   4. Plano ativo e acesso concedido ao assinante; criador visualiza nova assinatura no dashboard
+
+   Em resumo, é uma base pronta para quem quer oferecer conteúdo sob assinatura recorrente, com todo o fluxo de cadastro,
+   autenticação, cobrança e gestão de assinantes já implementado.
+
 ### Criadores
 
 - Gerenciamento de planos de assinatura
@@ -144,7 +145,7 @@ Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes
 ## 🤝 Contribuindo
 
 1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
+2. Crie uma branch para sua feature (`git checkout -b feature/NewFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some NewFeature'`)
+4. Push para a branch (`git push origin feature/NewFeature`)
 5. Abra um Pull Request
