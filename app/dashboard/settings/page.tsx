@@ -15,15 +15,15 @@ import {
   Select,
   SelectContent,
   SelectItem,
+  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { SelectTrigger } from "@radix-ui/react-select";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { FormEvent, use, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { AlertCircle, Eye, EyeOff } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -42,6 +42,7 @@ export default function SettingsPage() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+  const [pixKeyError, setPixKeyError] = useState("");
 
   useEffect(() => {
     if (session?.user) {
@@ -59,25 +60,77 @@ export default function SettingsPage() {
     }
   }, [newPassword, confirmPassword]);
 
+  // Validação da chave PIX
+  useEffect(() => {
+    if (!pixKey || !pixKeyType) {
+      setPixKeyError("");
+      return;
+    }
+
+    const isValid = (() => {
+      switch (pixKeyType) {
+        case "cpf":
+          return /^\d{11}$/.test(pixKey);
+        case "email":
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(pixKey);
+        case "telefone":
+          return /^(\+55)?\d{10,11}$/.test(pixKey);
+        case "aleatoria":
+          return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(pixKey);
+        default:
+          return false;
+      }
+    })();
+
+    if (!isValid) {
+      switch (pixKeyType) {
+        case "cpf":
+          setPixKeyError("CPF deve conter exatamente 11 dígitos numéricos");
+          break;
+        case "email":
+          setPixKeyError("Digite um email válido");
+          break;
+        case "telefone":
+          setPixKeyError("Digite um telefone válido com DDD (exemplo: 11999999999)");
+          break;
+        case "aleatoria":
+          setPixKeyError("Chave aleatória deve estar no formato UUID");
+          break;
+      }
+    } else {
+      setPixKeyError("");
+    }
+  }, [pixKey, pixKeyType]);
+
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
 
     try {
+      // Se for criador, validar os campos de PIX antes de enviar
+      if (isCreator && (!pixKey || !pixKeyType)) {
+        toast.error({
+          title: "Erro ao atualizar configurações",
+          description: "Chave Pix e tipo são obrigatórios para criadores",
+        });
+        return;
+      }
+
       const response = await fetch("/api/user/settings", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          pixKey,
-          pixKeyType,
+          pixKey: pixKey || null,
+          pixKeyType: pixKeyType || null,
           isCreator,
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const data = await response.json();
         throw new Error(data.message || "Erro ao atualizar configurações");
       }
 
@@ -85,9 +138,9 @@ export default function SettingsPage() {
         ...session,
         user: {
           ...session?.user,
-          pixKey,
-          pixKeyType,
-          isCreator,
+          pixKey: data.user.pixKey,
+          pixKeyType: data.user.pixKeyType,
+          isCreator: data.user.isCreator,
         },
       });
 
@@ -233,12 +286,20 @@ export default function SettingsPage() {
                 <CardTitle>Configurações de Pagamento</CardTitle>
                 <CardDescription>
                   Configure sua chave Pix para receber pagamentos.
+                  {isCreator && (
+                    <p className="mt-2 text-destructive">
+                      * Chave Pix é obrigatória para criadores
+                    </p>
+                  )}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="pix-key-type">Tipo de Chave Pix</Label>
-                  <Select value={pixKeyType} onValueChange={setPixKeyType}>
+                  <Select 
+                    value={pixKeyType} 
+                    onValueChange={setPixKeyType}
+                  >
                     <SelectTrigger id="pix-key-type">
                       <SelectValue placeholder="Selecione o tipo de chave" />
                     </SelectTrigger>
@@ -256,12 +317,28 @@ export default function SettingsPage() {
                     id="pix-key"
                     value={pixKey}
                     onChange={(e) => setPixKey(e.target.value)}
-                    placeholder="Digite sua chave Pix"
+                    placeholder={
+                      pixKeyType === "cpf"
+                        ? "Digite seu CPF (apenas números)"
+                        : pixKeyType === "email"
+                        ? "Digite seu email"
+                        : pixKeyType === "telefone"
+                        ? "Digite seu telefone com DDD"
+                        : pixKeyType === "aleatoria"
+                        ? "Digite sua chave aleatória"
+                        : "Digite sua chave Pix"
+                    }
                   />
+                  {pixKeyError && (
+                    <p className="text-sm text-destructive">{pixKeyError}</p>
+                  )}
                 </div>
               </CardContent>
               <CardFooter>
-                <Button type="submit" disabled={isLoading}>
+                <Button 
+                  type="submit" 
+                  disabled={isLoading}
+                >
                   {isLoading ? "Salvando..." : "Salvar Configurações"}
                 </Button>
               </CardFooter>

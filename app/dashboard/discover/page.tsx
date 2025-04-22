@@ -61,68 +61,29 @@ export default async function DiscoverPage() {
         </p>
       </div>
       {creators.length === 0 ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>Nenhum criador encontrado</CardTitle>
-            <CardDescription>
-              Não há criadores disponíveis no momento
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">
-              Volte mais tarde para descobrir novos criadores.
-            </p>
-          </CardContent>
-        </Card>
+        <p className="text-muted-foreground">Nenhum criador encontrado.</p>
       ) : (
-        <div className="grid gap-4 mb:grid-cols-2 lg:grid-cols-3">
-            {creators.map((creator) => {
-            const initials = creator.name
-              ? creator.name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")
-                  .toUpperCase()
-              : "U"
-
-            const hasPlans = creator._count.subscriptionPlans > 0
-            const cheapestPlan = creator.subscriptionPlans[0]
-
-            return (
-              <Card key={creator.id}>
-                <CardHeader className="flex flex-row items-center gap-4">
-                  <Avatar className="h-12 w-12">
-                    <AvatarImage src={creator.image || ""} alt={creator.name || ""} />
-                    <AvatarFallback>{initials}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <CardTitle>{creator.name}</CardTitle>
-                    <CardDescription>
-                      {hasPlans
-                        ? `${creator._count.subscriptionPlans} plano(s) disponível(is)`
-                        : "Nenhum plano disponível"}
-                    </CardDescription>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  {hasPlans && cheapestPlan ? (
-                    <p className="text-sm text-muted-foreground">
-                      Plano a partir de R$ {cheapestPlan.price.toFixed(2)}/mês
-                    </p>
-                  ) : (
-                    <p className="text-sm text-muted-foreground">
-                      Este criador ainda não configurou planos de assinatura.
-                    </p>
-                  )}
-                </CardContent>
-                <CardFooter>
-                  <Button asChild disabled={!hasPlans}>
-                    <Link href={`/dashboard/creator/${creator.id}`}>Ver Perfil</Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            )
-          })}
+        <div className="space-y-4">
+          {creators.map((creator) => (
+            <Card key={creator.id}>
+              <CardHeader>
+                <Avatar className="h-12 w-12">
+                  <AvatarImage src={creator.image || ""} alt={creator.name || ""} />
+                  <AvatarFallback>{creator.name}</AvatarFallback>
+                </Avatar>
+                <CardTitle>{creator.name}</CardTitle>
+                <CardDescription>{creator.subscriptionPlans[0]?.name}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>{creator.subscriptionPlans[0]?.description}</p>
+              </CardContent>
+              <CardFooter>
+                <Link href={`/dashboard/creator/${creator.id}`}>
+                  <Button variant="outline">Ver Planos</Button>
+                </Link>
+              </CardFooter>
+            </Card>
+          ))}
         </div>
       )}
     </div>

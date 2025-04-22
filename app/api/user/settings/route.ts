@@ -27,6 +27,17 @@ export async function PUT(request: Request) {
         )
       }
 
+      // Validar se o tipo de chave é válido
+      const validTypes = ["cpf", "email", "telefone", "aleatoria"]
+      if (!validTypes.includes(pixKeyType)) {
+        return NextResponse.json(
+          {
+            message: "Tipo de chave Pix inválido",
+          },
+          { status: 400 },
+        )
+      }
+
       // Validar a chave Pix com base no tipo
       if (!validatePixKey(pixKey, pixKeyType as PixKeyType)) {
         return NextResponse.json(
@@ -44,8 +55,8 @@ export async function PUT(request: Request) {
         id: session.user.id,
       },
       data: {
-        pixKey,
-        pixKeyType,
+        pixKey: isCreator ? pixKey : null,
+        pixKeyType: isCreator ? pixKeyType : null,
         isCreator,
       },
     })

@@ -15,6 +15,7 @@ import { getServerSession } from "next-auth";
 import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
+import { CancelSubscriptionButton } from "@/components/cancel-subscriptions-button";
 
 function formatCurrency(amount: number): string {
   return new Intl.NumberFormat("pt-BR", {
@@ -153,7 +154,7 @@ export default async function SubscriptionsPage() {
                             Ver Criador
                           </Link>
                         </Button>
-                        {/*<CancelSubscriptionButton id={subscription.id} />*/}
+                        <CancelSubscriptionButton id={subscription.id} />
                       </CardFooter>
                     </Card>
                   );
@@ -244,6 +245,7 @@ export default async function SubscriptionsPage() {
                         {latestPayment && (
                           <CheckPaymentStatus paymentId={latestPayment.id} />
                         )}
+                        <CancelSubscriptionButton id={subscription.id} />
                       </CardFooter>
                     </Card>
                   );

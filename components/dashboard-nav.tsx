@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   PlusCircle,
   Settings,
+  User,
   Users,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -24,6 +25,7 @@ export function DashboardNav({ vertical = false }: NavProps) {
 
   const isCreator = mode === "creator";
   const isSubscriber = mode === "subscriber";
+  const { data: session } = useSession();
 
   const navItems = [
     ...(mode === "creator"
@@ -33,6 +35,12 @@ export function DashboardNav({ vertical = false }: NavProps) {
             label: "Dashboard",
             icon: LayoutDashboard,
             active: pathname === "/dashboard",
+          },
+          {
+            href: `/dashboard/creator/${session?.user?.id}`,
+            label: "Meu Perfil",
+            icon: User,
+            active: pathname === `/dashboard/creator/${session?.user?.id}`,
           },
           {
             href: "/dashboard/subscribers",
