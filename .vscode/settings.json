@@ -1,7 +1,78 @@
 {
-    "cSpell.words": [
-        "Assinantes",
-        "Criador",
-        "Outros"
-    ]
-}
+    "files.associations": {
+      ".env*": "dotenv"
+    },
+    "editor.tokenColorCustomizations": {
+      "[*Light*]": {
+        "textMateRules": [
+          {
+            "scope": "ref.matchtext",
+            "settings": {
+              "foreground": "#000"
+            }
+          }
+        ]
+      },
+      "[*Dark*]": {
+        "textMateRules": [
+          {
+            "scope": "ref.matchtext",
+            "settings": {
+              "foreground": "#fff"
+            }
+          }
+        ]
+      },
+      "textMateRules": [
+        {
+          "scope": "keyword.other.dotenv",
+          "settings": {
+            "foreground": "#FF000000"
+          }
+        }
+      ]
+    },
+    "terminal.integrated.env.linux": {},
+    "workbench.sideBar.location": "right",
+    "console-ninja.featureSet": "Community",
+    "editor.fontFamily": "'JetBrains Mono', monospace",
+    "editor.fontLigatures": true,
+    "window.zoomLevel": 1,
+    "editor.minimap.enabled": false,
+    "eslint.enable": true,
+    "typescript.tsdk": "node_modules/typescript/lib", // garante que usa o TypeScript do projeto
+    "eslint.validate": ["typescript", "typescriptreact", "javascript", "javascriptreact"],
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.fixAll.eslint": "explicit"
+    },
+    "editor.formatOnSave": true,
+    "cSpell.userWords": ["Assinatura"],
+    "cSpell.language": "pt-BR",
+    "cSpell.enabledFileTypes": {
+      "*": true,
+      "markdown": true,
+      "plaintext": true,
+      "json": true,
+      "javascript": true,
+      "typescript": true,
+      "java": true,
+      "html": true,
+      "css": true,
+      "scss": true,
+      "less": true,
+      "xml": true,
+      "yaml": true,
+      "php": true,
+      "python": true,
+      "ruby": true,
+      "go": true,
+      "rust": true,
+      "swift": true,
+      "kotlin": true,
+      "dart": true,
+      "shellscript": true,
+      "bash": true
+    },
+    "workbench.iconTheme": "eq-material-theme-icons",
+  }  

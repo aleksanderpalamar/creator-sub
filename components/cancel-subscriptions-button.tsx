@@ -63,7 +63,7 @@ export function CancelSubscriptionButton({
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">Cancelar</Button>
+        <Button variant="destructive" className="cursor-pointer">Cancelar</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

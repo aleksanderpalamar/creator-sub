@@ -122,7 +122,7 @@ export default async function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {/* Placeholder para próximos pagamentos */}0
+                {recentSubscribers.length}
               </div>
               <p className="text-xs text-muted-foreground">
                 Pagamentos pendentes
@@ -266,8 +266,8 @@ export default async function DashboardPage() {
                         Próximo pagamento:{" "}
                         {subscription.nextPaymentDate
                           ? new Date(
-                              subscription.nextPaymentDate
-                            ).toLocaleDateString()
+                            subscription.nextPaymentDate
+                          ).toLocaleDateString()
                           : "N/A"}
                       </div>
                       <Button variant="outline" size="sm">

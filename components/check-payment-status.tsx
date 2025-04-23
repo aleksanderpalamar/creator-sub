@@ -78,6 +78,7 @@ export function CheckPaymentStatus({ paymentId }: CheckPaymentStatusProps) {
       disabled={isLoading}
       size="sm"
       variant="outline"
+      className="cursor-pointer"
     >
       {isLoading ? (
         <>

@@ -59,7 +59,7 @@ export default async function PlansPage() {
             <Button asChild>
               <Link href="/dashboard/plans/new">
                 <PlusCircle className="mr-2 h-4 w-4" />
-                Criar Plano
+                Nova assinatura
               </Link>
             </Button>
           </CardFooter>
