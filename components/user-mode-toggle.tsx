@@ -1,11 +1,15 @@
 "use client";
 
 import { useUserMode } from "@/context/user-mode-context";
-import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
+import { ToggleGroup } from "./ui/toggle-group";
 import { usePathname, useRouter } from "next/navigation";
+import { Switch } from "./ui/switch";
 
-
-
+/**
+ * Componente para alternar entre os modos de usuário (Criador e Assinante).
+ * Utiliza o contexto UserModeContext para gerenciar o estado do modo.
+ * Redireciona o usuário para a página apropriada com base no modo selecionado.
+ */
 export function UserModeToggle() {
   const { mode, setMode } = useUserMode();
   const router = useRouter();
@@ -24,15 +28,19 @@ export function UserModeToggle() {
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-sm text-muted-foreground">Mode:</span>
+    <div className="flex items-center gap-2 p-1.5">
+      <span className="text-sm text-muted-foreground">
+        {mode === "creator" ? "Criador" : "Assinante"}
+      </span>
       <ToggleGroup
         type="single"
         value={mode}
-        onValueChange={(val) => val && setMode(val as any)}
+        onValueChange={handleChange}
       >
-        <ToggleGroupItem value="creator">Criador</ToggleGroupItem>
-        <ToggleGroupItem value="subscriber">Assinantes</ToggleGroupItem>
+        <Switch
+          checked={mode === "creator"}
+          onCheckedChange={(checked) => setMode(checked ? "creator" : "subscriber")}
+        />
       </ToggleGroup>
     </div>
   );

@@ -38,7 +38,7 @@ export function DashboardNav({ vertical = false }: NavProps) {
           },
           {
             href: `/dashboard/creator/${session?.user?.id}`,
-            label: "Meu Perfil",
+            label: "Perfil",
             icon: User,
             active: pathname === `/dashboard/creator/${session?.user?.id}`,
           },
@@ -66,7 +66,7 @@ export function DashboardNav({ vertical = false }: NavProps) {
           },
           {
             href: "/dashboard/subscriptions",
-            label: "Minhas Assinaturas",
+            label: "Assinaturas",
             icon: CreditCard,
             active: pathname === "/dashboard/subscriptions",
           },
@@ -106,7 +106,7 @@ export function DashboardNav({ vertical = false }: NavProps) {
   }
 
   return (
-    <nav className="flex items-center space-x-4">
+    <nav className="flex items-center space-x-2">
       {routes.map((route) => {
         const Icon = route.icon;
         return (

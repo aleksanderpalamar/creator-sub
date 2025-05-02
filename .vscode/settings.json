@@ -74,5 +74,5 @@
       "shellscript": true,
       "bash": true
     },
-    "workbench.iconTheme": "eq-material-theme-icons",
+    "workbench.iconTheme": "material-icon-theme",
   }  
