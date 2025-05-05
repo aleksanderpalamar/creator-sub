@@ -5,8 +5,8 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
-): Promise<NextResponse> {
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     const session = await getServerSession(authOptions);
 
@@ -14,9 +14,12 @@ export async function GET(
       return NextResponse.json({ message: "Não autorizado" }, { status: 401 });
     }
 
+    const resolvedParams = await params;
+    const id = resolvedParams.id;
+
     const plan = await prisma.subscriptionPlan.findUnique({
       where: {
-        id: params.id,
+        id,
       },
     });
 
@@ -39,7 +42,7 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -48,9 +51,12 @@ export async function PUT(
       return NextResponse.json({ message: "Nao autorizado" }, { status: 401 });
     }
 
+    const resolvedParams = await params;
+    const id = resolvedParams.id;
+
     const plan = await prisma.subscriptionPlan.findUnique({
       where: {
-        id: params.id,
+        id,
       },
     });
 
@@ -80,7 +86,7 @@ export async function PUT(
 
     const updatePlan = await prisma.subscriptionPlan.update({
       where: {
-        id: params.id,
+        id,
       },
       data: {
         name,
@@ -108,7 +114,7 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -117,9 +123,12 @@ export async function DELETE(
       return NextResponse.json({ message: "Nao autorizado" }, { status: 401 });
     }
 
+    const resolvedParams = await params;
+    const id = resolvedParams.id;
+
     const plan = await prisma.subscriptionPlan.findUnique({
       where: {
-        id: params.id,
+        id,
       },
     });
 
@@ -139,7 +148,7 @@ export async function DELETE(
 
     await prisma.subscriptionPlan.delete({
       where: {
-        id: params.id,
+        id,
       },
     });
 
