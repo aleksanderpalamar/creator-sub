@@ -1,20 +1,25 @@
-import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { validatePixKey } from "@/lib/pix"
-import type { PixKeyType } from "@/lib/pix"
-import { authOptions } from "@/utils/authOptions"
-import prisma from "@/lib/prisma"
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { validatePixKey } from "@/lib/pix";
+import type { PixKeyType } from "@/lib/pix";
+import { authOptions } from "@/utils/authOptions";
+import prisma from "@/lib/prisma";
 
 export async function PUT(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(authOptions);
 
     if (!session || !session.user) {
-      return NextResponse.json({ message: "Não autorizado" }, { status: 401 })
+      return NextResponse.json({ message: "Não autorizado" }, { status: 401 });
     }
 
-    const body = await request.json()
-    const { pixKey, pixKeyType, isCreator } = body
+    const body = await request.json();
+    const { pixKey, pixKeyType, isCreator } = body;
+
+    console.log("Atualizando configurações do usuário:", {
+      userId: session.user.id,
+      isCreator,
+    });
 
     // Validar dados do Pix quando o usuário é criador
     if (isCreator) {
@@ -23,19 +28,8 @@ export async function PUT(request: Request) {
           {
             message: "Chave Pix e tipo são obrigatórios para criadores",
           },
-          { status: 400 },
-        )
-      }
-
-      // Validar se o tipo de chave é válido
-      const validTypes = ["cpf", "email", "telefone", "aleatoria"]
-      if (!validTypes.includes(pixKeyType)) {
-        return NextResponse.json(
-          {
-            message: "Tipo de chave Pix inválido",
-          },
-          { status: 400 },
-        )
+          { status: 400 }
+        );
       }
 
       // Validar a chave Pix com base no tipo
@@ -44,8 +38,8 @@ export async function PUT(request: Request) {
           {
             message: `Chave Pix inválida para o tipo ${pixKeyType}`,
           },
-          { status: 400 },
-        )
+          { status: 400 }
+        );
       }
     }
 
@@ -55,24 +49,32 @@ export async function PUT(request: Request) {
         id: session.user.id,
       },
       data: {
-        pixKey: isCreator ? pixKey : null,
-        pixKeyType: isCreator ? pixKeyType : null,
+        pixKey,
+        pixKeyType,
         isCreator,
       },
-    })
+    });
+
+    console.log("Usuário atualizado com sucesso:", {
+      id: updatedUser.id,
+      isCreator: updatedUser.isCreator,
+    });
 
     // Remover a senha do objeto retornado
-    const { password: _, ...userWithoutPassword } = updatedUser
+    const { password: _, ...userWithoutPassword } = updatedUser;
 
     return NextResponse.json(
       {
         user: userWithoutPassword,
         message: "Configurações atualizadas com sucesso",
       },
-      { status: 200 },
-    )
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("Erro ao atualizar configurações:", error)
-    return NextResponse.json({ message: "Erro interno do servidor" }, { status: 500 })
+    console.error("Erro ao atualizar configurações:", error);
+    return NextResponse.json(
+      { message: "Erro interno do servidor" },
+      { status: 500 }
+    );
   }
 }

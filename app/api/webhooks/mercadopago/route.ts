@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import MercadoPagoConfig, { Payment } from "mercadopago";
+import { notifySubscription } from "@/lib/notification-service";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -24,7 +25,12 @@ export async function POST(request: Request) {
         externalId: paymentId.toString(),
       },
       include: {
-        subscription: true,
+        subscription: {
+          include: {
+            subscriber: true,
+            subscriptionPlan: true,
+          },
+        },
       },
     });
 

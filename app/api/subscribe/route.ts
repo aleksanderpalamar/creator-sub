@@ -29,11 +29,11 @@ export async function POST(request: Request) {
       },
       include: {
         creator: {
-            select: {
-                name: true,
-                email: true,
-            }
-        }
+          select: {
+            name: true,
+            email: true,
+          },
+        },
       },
     });
 
@@ -63,12 +63,13 @@ export async function POST(request: Request) {
     const description = `Assinatura: ${plan.name} - Criador: ${plan.creator.name}`;
 
     const PixResult = await generatePixCode(
-        plan.price,
-        description,
-        session.user.email || undefined,
-        60 // Expira em 60 minutos
-    ) 
+      plan.price,
+      description,
+      session.user.email || undefined,
+      60 // Expira em 60 minutos
+    );
 
+    // Criar a assinatura con status "pending"
     const subscription = await prisma.subscription.create({
       data: {
         subscriberId: session.user.id,
@@ -78,6 +79,10 @@ export async function POST(request: Request) {
         nextPaymentDate: new Date(
           new Date().setMonth(new Date().getMonth() + 1)
         ),
+      },
+      include: {
+        subscriber: true,
+        subscriptionPlan: true,
       },
     });
 
@@ -89,15 +94,21 @@ export async function POST(request: Request) {
         paymentMethod: "pix",
         pixCode: PixResult.pixCode,
         pixExpiration: PixResult.pixExpirationDate,
-        externalId: PixResult.externalId
+        externalId: PixResult.externalId,
       },
     });
 
-    return NextResponse.json({
-      subscription,
-      payment,
-      message: "Assinatura criada com sucesso",
-    });
+    return NextResponse.json(
+      {
+        subscription,
+        payment: {
+          ...payment,
+          pixQrCodeBase64: PixResult.pixQrCodeBase64,
+        },
+        message: "Assinatura criada com sucesso",
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Erro ao criar assinatura:", error);
     return NextResponse.json(

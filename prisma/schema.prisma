@@ -56,6 +56,7 @@ model User {
   subscriptionPlans    SubscriptionPlan[]
   subscriptions        Subscription[]     @relation("Subscriber")
   creatorSubscriptions Subscription[]     @relation("Creator")
+  overlayConfig        OverlayConfig?
 }
 
 model VerificationToken {
@@ -113,4 +114,14 @@ model Payment {
   updatedAt       DateTime  @updatedAt
 
   subscription Subscription @relation(fields: [subscriptionId], references: [id])
+}
+
+model OverlayConfig {
+  id        String   @id @default(cuid())
+  creatorId String   @unique
+  config    Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 }

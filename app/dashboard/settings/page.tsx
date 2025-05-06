@@ -1,5 +1,10 @@
 "use client";
 
+import type React from "react";
+
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,15 +23,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { AlertCircle, Eye, EyeOff } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import Link from "next/link";
 
 export default function SettingsPage() {
   const { data: session, update } = useSession();
@@ -36,128 +39,84 @@ export default function SettingsPage() {
   const [pixKey, setPixKey] = useState("");
   const [pixKeyType, setPixKeyType] = useState("");
   const [isCreator, setIsCreator] = useState(false);
+
+  // Estados para alteração de senha
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
-  const [pixKeyError, setPixKeyError] = useState("");
 
   useEffect(() => {
     if (session?.user) {
       setPixKey(session.user.pixKey || "");
       setPixKeyType(session.user.pixKeyType || "");
-      setIsCreator(session.user.isCreator);
+      setIsCreator(session.user.isCreator || false);
     }
   }, [session]);
 
+  // Validar senhas
   useEffect(() => {
     if (newPassword && confirmPassword && newPassword !== confirmPassword) {
-      setPasswordError("As senhas não coincidem.");
+      setPasswordError("As senhas não coincidem");
     } else {
       setPasswordError("");
     }
   }, [newPassword, confirmPassword]);
 
-  // Validação da chave PIX
-  useEffect(() => {
-    if (!pixKey || !pixKeyType) {
-      setPixKeyError("");
-      return;
-    }
+  // Modificar a função onSubmitProfile para garantir que a sessão seja atualizada corretamente
 
-    const isValid = (() => {
-      switch (pixKeyType) {
-        case "cpf":
-          return /^\d{11}$/.test(pixKey);
-        case "email":
-          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(pixKey);
-        case "telefone":
-          return /^(\+55)?\d{10,11}$/.test(pixKey);
-        case "aleatoria":
-          return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(pixKey);
-        default:
-          return false;
-      }
-    })();
-
-    if (!isValid) {
-      switch (pixKeyType) {
-        case "cpf":
-          setPixKeyError("CPF deve conter exatamente 11 dígitos numéricos");
-          break;
-        case "email":
-          setPixKeyError("Digite um email válido");
-          break;
-        case "telefone":
-          setPixKeyError("Digite um telefone válido com DDD (exemplo: 11999999999)");
-          break;
-        case "aleatoria":
-          setPixKeyError("Chave aleatória deve estar no formato UUID");
-          break;
-      }
-    } else {
-      setPixKeyError("");
-    }
-  }, [pixKey, pixKeyType]);
-
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function onSubmitProfile(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     setIsLoading(true);
 
     try {
-      // Se for criador, validar os campos de PIX antes de enviar
-      if (isCreator && (!pixKey || !pixKeyType)) {
-        toast.error({
-          title: "Erro ao atualizar configurações",
-          description: "Chave Pix e tipo são obrigatórios para criadores",
-        });
-        return;
-      }
-
       const response = await fetch("/api/user/settings", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          pixKey: pixKey || null,
-          pixKeyType: pixKeyType || null,
+          pixKey,
+          pixKeyType,
           isCreator,
         }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
+        const data = await response.json();
         throw new Error(data.message || "Erro ao atualizar configurações");
       }
 
-      await update({
+      // Atualizar a sessão com os novos dados
+      const result = await update({
         ...session,
         user: {
           ...session?.user,
-          pixKey: data.user.pixKey,
-          pixKeyType: data.user.pixKeyType,
-          isCreator: data.user.isCreator,
+          pixKey,
+          pixKeyType,
+          isCreator,
         },
       });
 
+      console.log("Sessão atualizada:", result);
+
       toast.success({
-        title: "Configurações atualizadas com sucesso.",
-        description: "Suas configurações foram atualizadas com sucesso.",
+        title: "Configurações atualizadas",
+        description:
+          "Suas configurações foram atualizadas com sucesso. Você pode precisar fazer logout e login novamente para que todas as alterações tenham efeito.",
       });
 
+      // Forçar um refresh da página para garantir que a sessão seja atualizada
       router.refresh();
-    } catch (error) {
-      console.error("Erro ao atualizar configurações:", error);
+    } catch (error: any) {
+      console.error(error);
       toast.error({
         title: "Erro ao atualizar configurações",
         description:
-          error instanceof Error
-            ? error.message
-            : "Ocorreu um erro ao atualizar suas configurações.",
+          error.message ||
+          "Ocorreu um erro ao tentar atualizar suas configurações",
       });
     } finally {
       setIsLoading(false);
@@ -216,11 +175,12 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Configurações</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Configurações</h1>
         <p className="text-muted-foreground">
-          Gerencie suas configurações de conta e preferências.
+          Gerencie suas configurações de conta e preferências.
         </p>
       </div>
+
       <Tabs defaultValue="account" className="space-y-4">
         <TabsList>
           <TabsTrigger value="account">Conta</TabsTrigger>
@@ -228,10 +188,11 @@ export default function SettingsPage() {
           <TabsTrigger value="security">Segurança</TabsTrigger>
           <TabsTrigger value="notifications">Notificações</TabsTrigger>
         </TabsList>
+
         {/* Aba de Conta */}
         <TabsContent value="account" className="space-y-4">
           <Card>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={onSubmitProfile}>
               <CardHeader>
                 <CardTitle>Perfil</CardTitle>
                 <CardDescription>
@@ -261,13 +222,30 @@ export default function SettingsPage() {
                     disabled
                   />
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="creator-mode"
-                    checked={isCreator}
-                    onCheckedChange={setIsCreator}
-                  />
+                <div className="space-y-2">
                   <Label htmlFor="creator-mode">Modo Criador</Label>
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="creator-mode"
+                      checked={isCreator}
+                      onCheckedChange={setIsCreator}
+                    />
+                    <span>{isCreator ? "Ativado" : "Desativado"}</span>
+                  </div>
+
+                  {isCreator && (
+                    <div className="mt-4">
+                      <Button variant="outline" asChild>
+                        <Link href="/dashboard/overlay">
+                          Configurar Overlay de Notificações
+                        </Link>
+                      </Button>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Configure o overlay de notificações para exibir alertas
+                        quando novos assinantes se juntarem.
+                      </p>
+                    </div>
+                  )}
                 </div>
               </CardContent>
               <CardFooter>
@@ -278,28 +256,21 @@ export default function SettingsPage() {
             </form>
           </Card>
         </TabsContent>
+
         {/* Aba de Pagamentos */}
         <TabsContent value="payments" className="space-y-4">
           <Card>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={onSubmitProfile}>
               <CardHeader>
                 <CardTitle>Configurações de Pagamento</CardTitle>
                 <CardDescription>
                   Configure sua chave Pix para receber pagamentos.
-                  {isCreator && (
-                    <p className="mt-2 text-destructive">
-                      * Chave Pix é obrigatória para criadores
-                    </p>
-                  )}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="pix-key-type">Tipo de Chave Pix</Label>
-                  <Select 
-                    value={pixKeyType} 
-                    onValueChange={setPixKeyType}
-                  >
+                  <Select value={pixKeyType} onValueChange={setPixKeyType}>
                     <SelectTrigger id="pix-key-type">
                       <SelectValue placeholder="Selecione o tipo de chave" />
                     </SelectTrigger>
@@ -317,42 +288,28 @@ export default function SettingsPage() {
                     id="pix-key"
                     value={pixKey}
                     onChange={(e) => setPixKey(e.target.value)}
-                    placeholder={
-                      pixKeyType === "cpf"
-                        ? "Digite seu CPF (apenas números)"
-                        : pixKeyType === "email"
-                        ? "Digite seu email"
-                        : pixKeyType === "telefone"
-                        ? "Digite seu telefone com DDD"
-                        : pixKeyType === "aleatoria"
-                        ? "Digite sua chave aleatória"
-                        : "Digite sua chave Pix"
-                    }
+                    placeholder="Digite sua chave Pix"
                   />
-                  {pixKeyError && (
-                    <p className="text-sm text-destructive">{pixKeyError}</p>
-                  )}
                 </div>
               </CardContent>
               <CardFooter>
-                <Button 
-                  type="submit" 
-                  disabled={isLoading}
-                >
+                <Button type="submit" disabled={isLoading}>
                   {isLoading ? "Salvando..." : "Salvar Configurações"}
                 </Button>
               </CardFooter>
             </form>
           </Card>
         </TabsContent>
-        {/* Aba de Segurança */}
+
         {/* Nova Aba de Segurança */}
         <TabsContent value="security" className="space-y-4">
           <Card>
             <form onSubmit={onSubmitPassword}>
               <CardHeader>
                 <CardTitle>Alterar Senha</CardTitle>
-                <CardDescription>Atualize sua senha para manter sua conta segura.</CardDescription>
+                <CardDescription>
+                  Atualize sua senha para manter sua conta segura.
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
@@ -368,9 +325,15 @@ export default function SettingsPage() {
                     <button
                       type="button"
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                      onClick={() =>
+                        setShowCurrentPassword(!showCurrentPassword)
+                      }
                     >
-                      {showCurrentPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      {showCurrentPassword ? (
+                        <EyeOff size={16} />
+                      ) : (
+                        <Eye size={16} />
+                      )}
                     </button>
                   </div>
                 </div>
@@ -392,7 +355,11 @@ export default function SettingsPage() {
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
                       onClick={() => setShowNewPassword(!showNewPassword)}
                     >
-                      {showNewPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      {showNewPassword ? (
+                        <EyeOff size={16} />
+                      ) : (
+                        <Eye size={16} />
+                      )}
                     </button>
                   </div>
                 </div>
@@ -428,7 +395,13 @@ export default function SettingsPage() {
               <CardFooter>
                 <Button
                   type="submit"
-                  disabled={isLoading || !currentPassword || !newPassword || !confirmPassword || !!passwordError}
+                  disabled={
+                    isLoading ||
+                    !currentPassword ||
+                    !newPassword ||
+                    !confirmPassword ||
+                    !!passwordError
+                  }
                 >
                   {isLoading ? "Alterando..." : "Alterar Senha"}
                 </Button>
@@ -436,7 +409,8 @@ export default function SettingsPage() {
             </form>
           </Card>
         </TabsContent>
-        {/* Aba de Notificação */}
+
+        {/* Aba de Notificações */}
         <TabsContent value="notifications" className="space-y-4">
           <Card>
             <CardHeader>

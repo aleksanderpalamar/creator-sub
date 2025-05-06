@@ -1,3 +1,4 @@
+import { notifySubscription } from "@/lib/notification-service";
 import { checkPixPaymentStatus } from "@/lib/pix";
 import prisma from "@/lib/prisma";
 import { authOptions } from "@/utils/authOptions";
@@ -22,12 +23,18 @@ export async function POST(request: Request) {
       );
     }
 
+    // Buscar o pagamento
     const payment = await prisma.payment.findUnique({
       where: {
         id: paymentId,
       },
       include: {
-        subscription: true,
+        subscription: {
+          include: {
+            subscriber: true,
+            subscriptionPlan: true,
+          },
+        },
       },
     });
 
@@ -64,6 +71,7 @@ export async function POST(request: Request) {
       },
     });
 
+    // Atualizar a assinatura se o status mudou
     if (newSubscriptionStatus !== payment.subscription.status) {
       await prisma.subscription.update({
         where: {
@@ -77,6 +85,15 @@ export async function POST(request: Request) {
           }),
         },
       });
+
+      // Se o pagamento foi aprovado, enviar notificação para o overlay
+      if (paymentStatus === "approved") {
+        await notifySubscription(payment.subscription.creatorId, {
+          subscribe: {
+            name: payment.subscription.subscriber.name,
+          },
+        });
+      }
     }
 
     return NextResponse.json(

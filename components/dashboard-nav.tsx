@@ -1,19 +1,17 @@
 "use client";
 
-import { useUserMode } from "@/context/user-mode-context";
-import { cn } from "@/lib/utils";
-import {
-  BarChart,
-  CreditCard,
-  LayoutDashboard,
-  PlusCircle,
-  Settings,
-  User,
-  Users,
-} from "lucide-react";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
+import {
+  LayoutDashboard,
+  CreditCard,
+  Users,
+  Settings,
+  BarChart,
+  PlusCircle,
+} from "lucide-react";
 
 interface NavProps {
   vertical?: boolean;
@@ -21,65 +19,76 @@ interface NavProps {
 
 export function DashboardNav({ vertical = false }: NavProps) {
   const pathname = usePathname();
-  const { mode } = useUserMode();
-
-  const isCreator = mode === "creator";
-  const isSubscriber = mode === "subscriber";
   const { data: session } = useSession();
+  const isCreator = session?.user?.isCreator;
 
-  const navItems = [
-    ...(mode === "creator"
-      ? [
-          {
-            href: "/dashboard",
-            label: "Dashboard",
-            icon: LayoutDashboard,
-            active: pathname === "/dashboard",
-          },
-          {
-            href: `/dashboard/creator/${session?.user?.id}`,
-            label: "Perfil",
-            icon: User,
-            active: pathname === `/dashboard/creator/${session?.user?.id}`,
-          },
-          {
-            href: "/dashboard/subscribers",
-            label: "Assinantes",
-            icon: Users,
-            active: pathname === "/dashboard/subscribers",
-          },
-          {
-            href: "/dashboard/analytics",
-            label: "Estatisticas",
-            icon: BarChart,
-            active: pathname === "/dashboard/analytics",
-          },
-        ]
-      : []),
-    ...(mode === "subscriber"
-      ? [
-          {
-            href: "/dashboard/discover",
-            label: "Descobrir Criadores",
-            icon: PlusCircle,
-            active: pathname === "/dashboard/discover",
-          },
-          {
-            href: "/dashboard/subscriptions",
-            label: "Assinaturas",
-            icon: CreditCard,
-            active: pathname === "/dashboard/subscriptions",
-          },
-        ]
-      : []),
+  const routes = [
+    {
+      href: "/dashboard",
+      label: "Dashboard",
+      icon: LayoutDashboard,
+      active: pathname === "/dashboard",
+    },
   ];
 
-  const routes = isCreator
-    ? navItems
-    : isSubscriber
-    ? navItems
-    : [];
+  // Rotas específicas para criadores
+  if (isCreator) {
+    routes.push(
+      {
+        href: "/dashboard/plans",
+        label: "Planos",
+        icon: CreditCard,
+        active:
+          pathname === "/dashboard/plans" ||
+          pathname.startsWith("/dashboard/plans/"),
+      },
+      {
+        href: "/dashboard/subscribers",
+        label: "Assinantes",
+        icon: Users,
+        active: pathname === "/dashboard/subscribers",
+      },
+      {
+        href: "/dashboard/analytics",
+        label: "Estatísticas",
+        icon: BarChart,
+        active: pathname === "/dashboard/analytics",
+      },
+      {
+        href: "/dashboard/overlay",
+        label: "Overlay",
+        icon: PlusCircle,
+        active: pathname === "/dashboard/overlay",
+      }
+    );
+  } else {
+    // Rotas para assinantes
+    routes.push({
+      href: "/dashboard/subscriptions",
+      label: "Minhas Assinaturas",
+      icon: CreditCard,
+      active: pathname === "/dashboard/subscriptions",
+    });
 
+    routes.push({
+      href: "/dashboard/discover",
+      label: "Descobrir Criadores",
+      icon: PlusCircle,
+      active:
+        pathname === "/dashboard/discover" ||
+        pathname.startsWith("/dashboard/creator/"),
+    });
+  }
+
+  // Configurações para todos os usuários
+  routes.push({
+    href: "/dashboard/settings",
+    label: "Configurações",
+    icon: Settings,
+    active: pathname === "/dashboard/settings",
+  });
+
+  // Estilo para navegação vertical (sidebar)
   if (vertical) {
     return (
       <nav className="flex flex-col space-y-1 w-full">
@@ -105,8 +114,9 @@ export function DashboardNav({ vertical = false }: NavProps) {
     );
   }
 
+  // Estilo para navegação horizontal (header)
   return (
-    <nav className="flex items-center space-x-2">
+    <nav className="flex items-center space-x-4">
       {routes.map((route) => {
         const Icon = route.icon;
         return (
