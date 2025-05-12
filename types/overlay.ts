@@ -1,24 +1,19 @@
 export interface OverlayConfig {
-  titleText: string;
+  titleText: string
 
-  backgroundColor: string;
-  textColor?: string;
-  accentColor?: string;
+  backgroundColor: string
+  textColor?: string
+  accentColor?: string
 
-  fontFamily?: string;
-  titleSize?: string;
-  messageSize?: string;
+  fontFamily?: string
+  titleSize?: string
+  messageSize?: string
 
-  position?:
-    | "top-left"
-    | "top-right"
-    | "bottom-left"
-    | "bottom-right"
-    | "center";
-  notificationWidth?: string;
-  roundedCorners?: boolean;
+  position?: "top-left" | "top-right" | "bottom-left" | "bottom-right" | "center"
+  notificationWidth?: string
+  roundedCorners?: boolean
 
-  displayDuration?: number;
-  soundEnabled?: boolean;
-  soundUrl?: string;
+  displayDuration?: number
+  soundEnabled?: boolean
+  soundUrl?: string
 }
