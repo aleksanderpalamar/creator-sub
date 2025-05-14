@@ -27,9 +27,6 @@ export default async function DashboardLayout({
           <div className="flex h-16 items-center px-4 sm:px-6">
             <div className="font-bold text-xl mr-6">CreatorSub</div>
             <MobileNav />
-            <nav className="hidden md:flex flex-1 items-center space-x-4 lg:space-x-6">
-              <DashboardNav />
-            </nav>
             <div className="ml-auto flex items-center space-x-4">
               <UserModeToggle />
               <ThemeSwitch />
