@@ -7,6 +7,12 @@ export const Footer = () => {
         © 2024 CreatorSub. Todos os direitos reservados.
       </p>
       <nav className="sm:ml-auto flex gap-4 sm:gap-6">
+        <Link
+          className="text-xs hover:underline underline-offset-4"
+          href="/docs"
+        >
+          Documentação
+        </Link>
         <Link className="text-xs hover:underline underline-offset-4" href="#">
           Termos de Serviço
         </Link>
