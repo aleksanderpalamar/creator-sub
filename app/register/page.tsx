@@ -128,9 +128,14 @@ export default function RegisterPage() {
                 Sou um criador de conteúdo
               </label>
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button
+              type="submit"
+              className="w-full bg-violet-500 hover:bg-violet-600 transition-colors duration-300 cursor-pointer"
+              disabled={isLoading}
+            >
               {isLoading ? "Registrando..." : "Registrar"}
             </Button>
+            {/*
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" />
@@ -149,7 +154,8 @@ export default function RegisterPage() {
               disabled={isLoading}
             >
               Google
-            </Button>
+            </Button>            
+            */}
           </CardContent>
         </form>
         <CardFooter className="flex flex-col">
@@ -157,7 +163,7 @@ export default function RegisterPage() {
             Já tem uma conta?{" "}
             <Link
               href="/login"
-              className="text-primary underline-offset-4 hover:underline"
+              className="text-violet-500 underline-offset-4 hover:underline"
             >
               Faça login
             </Link>

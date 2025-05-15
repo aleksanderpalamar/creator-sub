@@ -36,7 +36,7 @@ export function DashboardNav({ vertical = false }: NavProps) {
     routes.push(
       {
         href: "/dashboard/plans",
-        label: "Planos",
+        label: "Assinaturas",
         icon: CreditCard,
         active:
           pathname === "/dashboard/plans" ||
@@ -101,8 +101,8 @@ export function DashboardNav({ vertical = false }: NavProps) {
               className={cn(
                 "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                 route.active
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  ? "bg-violet-500 text-primary-foreground"
+                  : "text-muted-foreground hover:bg-violet-50 hover:text-violet-500"
               )}
             >
               <Icon className="h-5 w-5" />
@@ -126,8 +126,8 @@ export function DashboardNav({ vertical = false }: NavProps) {
             className={cn(
               "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium transition-colors",
               route.active
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                ? "bg-violet-500 text-primary-foreground"
+                : "text-muted-foreground hover:bg-violet-50 hover:text-violet-500"
             )}
           >
             <Icon className="h-4 w-4" />

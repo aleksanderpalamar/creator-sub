@@ -1,4 +1,5 @@
 import { DashboardNav } from "@/components/dashboard-nav";
+import { Logo } from "@/components/header/logo";
 import { MobileNav } from "@/components/mobile-nav";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { UserModeToggle } from "@/components/user-mode-toggle";
@@ -25,7 +26,7 @@ export default async function DashboardLayout({
       <div className="flex min-h-screen flex-col">
         <header className="sticky top-0 z-10 border-b bg-background">
           <div className="flex h-16 items-center px-4 sm:px-6">
-            <div className="font-bold text-xl mr-6">CreatorSub</div>
+            <Logo />
             <MobileNav />
             <div className="ml-auto flex items-center space-x-4">
               <UserModeToggle />

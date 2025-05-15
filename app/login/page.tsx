@@ -1,7 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
@@ -86,9 +93,14 @@ export default function LoginPage() {
               </div>
               <Input id="password" name="password" type="password" required />
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button
+              type="submit"
+              className="w-full bg-violet-500 hover:bg-violet-600 transition-colors duration-300 cursor-pointer"
+              disabled={isLoading}
+            >
               {isLoading ? "Entrando..." : "Entrar"}
             </Button>
+            {/* 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" />
@@ -108,6 +120,7 @@ export default function LoginPage() {
             >
               Google
             </Button>
+            */}
           </CardContent>
         </form>
         <CardFooter className="flex flex-col">
@@ -115,7 +128,7 @@ export default function LoginPage() {
             Não tem uma conta?{" "}
             <Link
               href="/register"
-              className="text-primary underline-offset-4 hover:underline"
+              className="text-violet-500 underline-offset-4 hover:underline"
             >
               Registre-se
             </Link>

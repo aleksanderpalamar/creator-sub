@@ -75,53 +75,59 @@ export default async function DashboardPage() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
+          <Card className="bg-cyan-50 dark:border-cyan-500">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
+              <CardTitle className="text-sm font-medium dark:text-zinc-950">
                 Total de Planos
               </CardTitle>
-              <CreditCard className="h-4 w-4 text-muted-foreground" />
+              <CreditCard className="h-5 w-5 text-cyan-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{plansCount}</div>
+              <div className="text-2xl font-bold text-cyan-500">
+                {plansCount}
+              </div>
               <p className="text-xs text-muted-foreground">
                 Planos de assinatura ativos
               </p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-violet-50 dark:border-violet-500">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Assinantes</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium dark:text-zinc-950">
+                Assinantes
+              </CardTitle>
+              <Users className="h-5 w-5 text-violet-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{subscribersCount}</div>
+              <div className="text-2xl font-bold text-violet-500">
+                {subscribersCount}
+              </div>
               <p className="text-xs text-muted-foreground">Assinantes ativos</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-emerald-50 dark:border-emerald-500">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
+              <CardTitle className="text-sm font-medium dark:text-zinc-950">
                 Receita Total
               </CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              <TrendingUp className="h-5 w-5 text-yellow-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-bold text-emerald-500">
                 R$ {(totalRevenue._sum.amount || 0).toFixed(2)}
               </div>
               <p className="text-xs text-muted-foreground">Receita acumulada</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-blue-50 dark:border-blue-500">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
+              <CardTitle className="text-sm font-medium dark:text-zinc-950">
                 Próximos Pagamentos
               </CardTitle>
-              <AlertCircle className="h-4 w-4 text-muted-foreground" />
+              <AlertCircle className="h-5 w-5 text-blue-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-bold text-blue-500">
                 {recentSubscribers.length}
               </div>
               <p className="text-xs text-muted-foreground">
@@ -176,16 +182,31 @@ export default async function DashboardPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Button asChild className="w-full">
+              <Button
+                asChild
+                className="w-full bg-violet-500 hover:bg-violet-600 transition-colors duration-300"
+              >
                 <Link href="/dashboard/plans/new">Criar Nova Assinatura</Link>
               </Button>
-              <Button asChild variant="outline" className="w-full">
+              <Button
+                asChild
+                variant="outline"
+                className="w-full hover:bg-violet-50 hover:text-violet-500"
+              >
                 <Link href="/dashboard/plans">Gerenciar Assinaturas</Link>
               </Button>
-              <Button asChild variant="outline" className="w-full">
+              <Button
+                asChild
+                variant="outline"
+                className="w-full hover:bg-violet-50 hover:text-violet-500"
+              >
                 <Link href="/dashboard/subscribers">Ver Assinantes</Link>
               </Button>
-              <Button asChild variant="outline" className="w-full">
+              <Button
+                asChild
+                variant="outline"
+                className="w-full hover:bg-violet-50 hover:text-violet-500"
+              >
                 <Link href="/dashboard/settings">Configurar Pix</Link>
               </Button>
             </CardContent>
@@ -266,8 +287,8 @@ export default async function DashboardPage() {
                         Próximo pagamento:{" "}
                         {subscription.nextPaymentDate
                           ? new Date(
-                            subscription.nextPaymentDate
-                          ).toLocaleDateString()
+                              subscription.nextPaymentDate
+                            ).toLocaleDateString()
                           : "N/A"}
                       </div>
                       <Button variant="outline" size="sm">
