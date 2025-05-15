@@ -177,35 +177,37 @@ export default function DocsPage() {
                   <CardContent>
                     <div className="overflow-x-auto">
                       <pre className="text-sm p-4 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                        {`📂 app                   # Diretórios e arquivos da aplicação Next.js (App Router)
-                              ┣ 📂 api                # Rotas de API (Server-side)
-                              ┣ 📂 dashboard          # Páginas do dashboard (área logada)
-                              ┣ 📂 overlay            # Páginas do overlay para streams
-                              ┣ 📂 login              # Página de login
-                              ┣ 📂 register           # Página de registro
-                              ┣ 📂 about              # Página sobre o projeto
-                              ┣ 📂 docs               # Documentação
-                              ┣ 📜 layout.tsx         # Layout principal da aplicação
-                              ┣ 📜 page.tsx           # Página inicial
-                              ┗ 📜 globals.css        # Estilos globais
+                        {`
+                          📂 app                  # Diretórios e arquivos da aplicação Next.js (App Router)
+                          ┣ 📂 api                # Rotas de API (Server-side)
+                          ┣ 📂 dashboard          # Páginas do dashboard (área logada)
+                          ┣ 📂 overlay            # Páginas do overlay para streams
+                          ┣ 📂 login              # Página de login
+                          ┣ 📂 register           # Página de registro
+                          ┣ 📂 about              # Página sobre o projeto
+                          ┣ 📂 docs               # Documentação
+                          ┣ 📜 layout.tsx         # Layout principal da aplicação
+                          ┣ 📜 page.tsx           # Página inicial
+                          ┗ 📜 globals.css        # Estilos globais
 
-                            📂 components            # Componentes React reutilizáveis
-                              ┣ 📂 ui                 # Componentes de UI (shadcn/ui)
-                              ┣ 📂 overlay            # Componentes do overlay para streams
-                              ┗ 📜 ...                # Outros componentes
+                          📂 components            # Componentes React reutilizáveis
+                          ┣ 📂 ui                 # Componentes de UI (shadcn/ui)
+                          ┣ 📂 overlay            # Componentes do overlay para streams
+                          ┗ 📜 ...                # Outros componentes
 
-                            📂 lib                   # Bibliotecas e utilitários
-                              ┣ 📜 prisma.ts          # Cliente Prisma
-                              ┣ 📜 pix.ts             # Utilitários para integração com Pix
-                              ┣ 📜 utils.ts           # Funções utilitárias
-                              ┗ 📜 ...                # Outros utilitários
+                          📂 lib                   # Bibliotecas e utilitários
+                          ┣ 📜 prisma.ts          # Cliente Prisma
+                          ┣ 📜 pix.ts             # Utilitários para integração com Pix
+                          ┣ 📜 utils.ts           # Funções utilitárias
+                          ┗ 📜 ...                # Outros utilitários
 
-                            📂 types                 # Definições de tipos TypeScript
-                            📂 hooks                 # React Hooks personalizados
-                            📂 context               # Contextos React
-                            📂 providers             # Providers React
-                            📂 prisma                # Configuração do Prisma e schema do banco de dados
-                            📂 public                # Arquivos estáticos`}
+                          📂 types                 # Definições de tipos TypeScript
+                          📂 hooks                 # React Hooks personalizados
+                          📂 context               # Contextos React
+                          📂 providers             # Providers React
+                          📂 prisma                # Configuração do Prisma e schema do banco de dados
+                          📂 public                # Arquivos estáticos
+                        `}
                       </pre>
                     </div>
                   </CardContent>
@@ -701,32 +703,37 @@ export default function DocsPage() {
                       </h3>
                       <div className="overflow-x-auto">
                         <pre className="text-sm p-4 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                          {`// Requisição
-                          POST /api/plans
-                          Content-Type: application/json
-                          Authorization: Bearer {token}
+                          {`                            
+                            // Requisição
+                            {
+                              POST /api/plans
+                              Content-Type: application/json
+                              Authorization: Bearer {token}
 
-                          {
-                            "name": "Plano Premium",
-                            "description": "Acesso a todo o conteúdo exclusivo",
-                            "price": 29.90,
-                            "benefits": "Acesso antecipado a vídeos\\nChat exclusivo\\nSorteios mensais"
-                          }
-
-                          // Resposta
-                          {
-                            "plan": {
-                              "id": "clz123abc456",
-                              "name": "Plano Premium",
-                              "description": "Acesso a todo o conteúdo exclusivo",
-                              "price": 29.90,
-                              "benefits": "Acesso antecipado a vídeos\\nChat exclusivo\\nSorteios mensais",
-                              "creatorId": "usr789xyz012",
-                              "createdAt": "2024-05-14T12:34:56.789Z",
-                              "updatedAt": "2024-05-14T12:34:56.789Z"
-                            },
-                            "message": "Plano criado com sucesso"
-                          }`}
+                              {
+                                "name": "Plano Premium",
+                                "description": "Acesso a todo o conteúdo exclusivo",
+                                "price": 29.90,
+                                "benefits": "Acesso antecipado a vídeos\\nChat exclusivo\\nSorteios mensais"
+                              }
+                            }
+                            
+                            // Resposta
+                            {
+                              {
+                                "plan": {
+                                  "id": "clz123abc456",
+                                  "name": "Plano Premium",
+                                  "description": "Acesso a todo o conteúdo exclusivo",
+                                  "price": 29.90,
+                                  "benefits": "Acesso antecipado a vídeos\\nChat exclusivo\\nSorteios mensais",
+                                  "creatorId": "usr789xyz012",
+                                  "createdAt": "2024-05-14T12:34:56.789Z",
+                                  "updatedAt": "2024-05-14T12:34:56.789Z"
+                              },
+                              "message": "Plano criado com sucesso"
+                            }
+                          `}
                         </pre>
                       </div>
                     </div>
@@ -737,37 +744,41 @@ export default function DocsPage() {
                       </h3>
                       <div className="overflow-x-auto">
                         <pre className="text-sm p-4 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                          {`// Requisição
-                            POST /api/subscribe
-                            Content-Type: application/json
-                            Authorization: Bearer {token}
+                          {`
+                            // Requisição
+                              {
+                                POST /api/subscribe
+                                Content-Type: application/json
+                                Authorization: Bearer {token}
 
-                            {
-                              "creatorId": "usr789xyz012",
-                              "planId": "clz123abc456"
-                            }
+                                {
+                                  "creatorId": "usr789xyz012",
+                                  "planId": "clz123abc456"
+                                }
+                              }
 
-                            // Resposta
-                            {
-                              "subscription": {
-                                "id": "sub456def789",
-                                "subscriberId": "usr345uvw678",
-                                "creatorId": "usr789xyz012",
-                                "subscriptionPlanId": "clz123abc456",
-                                "status": "pending",
-                                "startDate": "2024-05-14T12:34:56.789Z",
-                                "nextPaymentDate": "2024-06-14T12:34:56.789Z",
-                                "createdAt": "2024-05-14T12:34:56.789Z",
-                                "updatedAt": "2024-05-14T12:34:56.789Z"
-                              },
-                              "payment": {
-                                "id": "pay789ghi012",
-                                "pixCode": "00020101021226...",
-                                "pixQrCodeBase64": "iVBORw0KGgoAAAANSUhEUgAA...",
-                                "pixExpiration": "2024-05-14T13:34:56.789Z"
-                              },
-                              "message": "Assinatura criada com sucesso"
-                            }`}
+                              // Resposta
+                              {
+                                "subscription": {
+                                  "id": "sub456def789",
+                                  "subscriberId": "usr345uvw678",
+                                  "creatorId": "usr789xyz012",
+                                  "subscriptionPlanId": "clz123abc456",
+                                  "status": "pending",
+                                  "startDate": "2024-05-14T12:34:56.789Z",
+                                  "nextPaymentDate": "2024-06-14T12:34:56.789Z",
+                                  "createdAt": "2024-05-14T12:34:56.789Z",
+                                  "updatedAt": "2024-05-14T12:34:56.789Z"
+                                },
+                                "payment": {
+                                  "id": "pay789ghi012",
+                                  "pixCode": "00020101021226...",
+                                  "pixQrCodeBase64": "iVBORw0KGgoAAAANSUhEUgAA...",
+                                  "pixExpiration": "2024-05-14T13:34:56.789Z"
+                                },
+                                "message": "Assinatura criada com sucesso"
+                              }
+                          `}
                         </pre>
                       </div>
                     </div>
@@ -778,24 +789,28 @@ export default function DocsPage() {
                       </h3>
                       <div className="overflow-x-auto">
                         <pre className="text-sm p-4 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                          {`// Requisição
-                          POST /api/payments/check-status
-                          Content-Type: application/json
-                          Authorization: Bearer {token}
+                          {`
+                            // Requisição
+                            {
+                              POST /api/payments/check-status
+                              Content-Type: application/json
+                              Authorization: Bearer {token}
 
-                          {
-                            "paymentId": "pay789ghi012"
-                          }
-
-                          // Resposta
-                          {
-                            "status": "approved",
-                            "payment": {
-                              "id": "pay789ghi012",
-                              "status": "completed",
-                              "updatedAt": "2024-05-14T12:45:23.456Z"
+                              {
+                                "paymentId": "pay789ghi012"
+                              }
                             }
-                          }`}
+
+                            // Resposta
+                            {
+                              "status": "approved",
+                              "payment": {
+                                "id": "pay789ghi012",
+                                "status": "completed",
+                                "updatedAt": "2024-05-14T12:45:23.456Z"
+                              }
+                            }
+                          `}
                         </pre>
                       </div>
                     </div>
@@ -821,89 +836,84 @@ export default function DocsPage() {
                     </p>
 
                     <div className="overflow-x-auto">
-                      <pre className="text-sm p-4 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                        {`// Schema Prisma simplificado
+                      <pre className="text-sm p-2 bg-zinc-100 dark:bg-zinc-900 rounded-lg object-cover">
+                        {`
+                          // Schema Prisma simplificado
+                          model User {
+                            id            String    @id @default(cuid())
+                            name          String?
+                            email         String?   @unique
+                            emailVerified DateTime?
+                            image         String?
+                            password      String?
+                            accounts      Account[]
+                            sessions      Session[]
+                            // Campos específicos para criadores
+                            isCreator     Boolean   @default(false)
+                            pixKey        String?
+                            pixKeyType    String?   // cpf, email, telefone, chave aleatória
+                            // Relacionamentos
+                            subscriptionPlans    SubscriptionPlan[]
+                            subscriptions        Subscription[]     @relation("Subscriber")
+                            creatorSubscriptions Subscription[]     @relation("Creator")
+                            overlayConfig        OverlayConfig?
+                          }
 
-                        model User {
-                          id            String    @id @default(cuid())
-                          name          String?
-                          email         String?   @unique
-                          emailVerified DateTime?
-                          image         String?
-                          password      String?
-                          accounts      Account[]
-                          sessions      Session[]
+                          model SubscriptionPlan {
+                            id          String   @id @default(cuid())
+                            creatorId   String
+                            name        String
+                            description String?
+                            price       Float
+                            benefits    String?
+                            createdAt   DateTime @default(now())
+                            updatedAt   DateTime @updatedAt
+                            creator     User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+                            subscriptions Subscription[]
+                          }
 
-                          // Campos específicos para criadores
-                          isCreator     Boolean   @default(false)
-                          pixKey        String?
-                          pixKeyType    String?   // cpf, email, telefone, chave aleatória
+                          model Subscription {
+                            id                 String    @id @default(cuid())
+                            subscriberId       String
+                            creatorId          String
+                            subscriptionPlanId String
+                            status             String    // active, cancelled, pending
+                            startDate          DateTime  @default(now())
+                            endDate            DateTime?
+                            lastPaymentDate    DateTime?
+                            nextPaymentDate    DateTime?
+                            createdAt          DateTime  @default(now())
+                            updatedAt          DateTime  @updatedAt 
+                            subscriber  User   @relation("Subscriber", fields: [subscriberId], references: [id])
+                            creator     User   @relation("Creator", fields: [creatorId], references: [id])
+                            subscriptionPlan SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id])
+                            payments         Payment[]
+                          }
 
-                          // Relacionamentos
-                          subscriptionPlans    SubscriptionPlan[]
-                          subscriptions        Subscription[]     @relation("Subscriber")
-                          creatorSubscriptions Subscription[]     @relation("Creator")
-                          overlayConfig        OverlayConfig?
-                        }
+                          model Payment {
+                            id              String    @id @default(cuid())
+                            subscriptionId  String
+                            amount          Float
+                            status          String    // pending, completed, failed
+                            paymentMethod   String    // pix
+                            pixCode         String?   // Código Pix copia e cola
+                            pixQrCodeBase64 String?   // Código Pix em base64
+                            pixExpiration   DateTime? // Data de expiração do Código Pix
+                            externalId      String?   // ID da transação no provedor de pagamento
+                            createdAt       DateTime  @default(now())
+                            updatedAt       DateTime  @updatedAt
+                            subscription Subscription @relation(fields: [subscriptionId], references: [id])
+                          }
 
-                        model SubscriptionPlan {
-                          id          String   @id @default(cuid())
-                          creatorId   String
-                          name        String
-                          description String?
-                          price       Float
-                          benefits    String?
-                          createdAt   DateTime @default(now())
-                          updatedAt   DateTime @updatedAt
-
-                          creator       User           @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-                          subscriptions Subscription[]
-                        }
-
-                        model Subscription {
-                          id                 String    @id @default(cuid())
-                          subscriberId       String
-                          creatorId          String
-                          subscriptionPlanId String
-                          status             String    // active, cancelled, pending
-                          startDate          DateTime  @default(now())
-                          endDate            DateTime?
-                          lastPaymentDate    DateTime?
-                          nextPaymentDate    DateTime?
-                          createdAt          DateTime  @default(now())
-                          updatedAt          DateTime  @updatedAt
-
-                          subscriber       User             @relation("Subscriber", fields: [subscriberId], references: [id])
-                          creator          User             @relation("Creator", fields: [creatorId], references: [id])
-                          subscriptionPlan SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id])
-                          payments         Payment[]
-                        }
-
-                        model Payment {
-                          id              String    @id @default(cuid())
-                          subscriptionId  String
-                          amount          Float
-                          status          String    // pending, completed, failed
-                          paymentMethod   String    // pix
-                          pixCode         String?   // Código Pix copia e cola
-                          pixQrCodeBase64 String?   // Código Pix em base64
-                          pixExpiration   DateTime? // Data de expiração do Código Pix
-                          externalId      String?   // ID da transação no provedor de pagamento
-                          createdAt       DateTime  @default(now())
-                          updatedAt       DateTime  @updatedAt
-
-                          subscription Subscription @relation(fields: [subscriptionId], references: [id])
-                        }
-
-                        model OverlayConfig {
-                          id        String   @id @default(cuid())
-                          creatorId String   @unique
-                          config    Json
-                          createdAt DateTime @default(now())
-                          updatedAt DateTime @updatedAt
-
-                          creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-                        }`}
+                          model OverlayConfig {
+                            id        String   @id @default(cuid())
+                            creatorId String   @unique
+                            config    Json
+                            createdAt DateTime @default(now())
+                            updatedAt DateTime @updatedAt
+                            creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+                          }
+                        `}
                       </pre>
                     </div>
 
@@ -963,20 +973,22 @@ export default function DocsPage() {
                       <h3 className="text-lg font-semibold">Comandos Prisma</h3>
                       <div className="overflow-x-auto">
                         <pre className="text-sm p-4 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                          {`# Gerar migrações a partir de alterações no schema
-                              npx prisma migrate dev --name nome_da_migracao
+                          {`
+                            # Gerar migrações a partir de alterações no schema
+                            npx prisma migrate dev --name nome_da_migracao
 
-                              # Aplicar migrações em ambiente de produção
-                              npx prisma migrate deploy
-
-                              # Gerar cliente Prisma atualizado
-                              npx prisma generate
-
-                              # Visualizar e editar dados no Prisma Studio
-                              npx prisma studio
-
-                              # Resetar o banco de dados (apenas em desenvolvimento)
-                              npx prisma migrate reset`}
+                            # Aplicar migrações em ambiente de produção
+                            npx prisma migrate deploy
+                            
+                            # Gerar cliente Prisma atualizado
+                            npx prisma generate
+                            
+                            # Visualizar e editar dados no Prisma Studio
+                            npx prisma studio
+                            
+                            # Resetar o banco de dados (apenas em desenvolvimento)
+                            npx prisma migrate reset
+                          `}
                         </pre>
                       </div>
                     </div>
@@ -1327,9 +1339,7 @@ export default function DocsPage() {
                       </p>
                       <div className="overflow-x-auto">
                         <pre className="text-sm p-4 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                          {`# .env
-                            MERCADO_PAGO_ACCESS_TOKEN="TEST-1234567890abcdef1234567890abcdef-123456789"
-                          `}
+                          {`# .env MERCADO_PAGO_ACCESS_TOKEN="TEST-1234567890abcdef1234567890abcdef-123456789"`}
                         </pre>
                       </div>
                     </div>
@@ -1370,11 +1380,13 @@ export default function DocsPage() {
                           </p>
                           <div className="overflow-x-auto pl-4">
                             <pre className="text-sm p-4 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                              {`export async function checkPixPaymentStatus(
-                                externalId: string
-                              ): Promise<"approved" | "pending" | "rejected"> {
-                                // Implementação
-                              }`}
+                              {`
+                                export async function checkPixPaymentStatus(
+                                  externalId: string
+                                ): Promise<"approved" | "pending" | "rejected"> {
+                                  // Implementação
+                                }
+                              `}
                             </pre>
                           </div>
                         </li>
@@ -1386,12 +1398,14 @@ export default function DocsPage() {
                           </p>
                           <div className="overflow-x-auto pl-4">
                             <pre className="text-sm p-4 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                              {`export function validatePixKey(
-                                pixKey: string, 
-                                pixKeyType: PixKeyType
-                              ): boolean {
-                                // Implementação
-                              }`}
+                              {`
+                                export function validatePixKey(
+                                  pixKey: string, 
+                                  pixKeyType: PixKeyType
+                                ): boolean {
+                                  // Implementação
+                                }
+                              `}
                             </pre>
                           </div>
                         </li>
@@ -1457,46 +1471,49 @@ export default function DocsPage() {
                       </p>
                       <div className="overflow-x-auto">
                         <pre className="text-sm p-4 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                          {`// lib/notification-service.ts
+                          {`
+                            // lib/notification-service.ts
 
-                          // Armazenar conexões ativas por criador
-                          const connections = new Map<string, Set<ReadableStreamController<Uint8Array>>>()
+                            // Armazenar conexões ativas por criador
+                            const connections = new Map<string, Set<ReadableStreamController<Uint8Array>>>()
 
-                          // Função para enviar notificação para um criador específico
-                          export async function notifySubscription(creatorId: string, data: any) {
-                            const creatorConnections = connections.get(creatorId)
-
-                            if (!creatorConnections) return
-
-                            const message = \`data: \${JSON.stringify(data)}\n\n\`
-
-                            for (const controller of creatorConnections) {
-                              try {
-                                controller.enqueue(new TextEncoder().encode(message))
-                              } catch (error) {
-                                console.error("Erro ao enviar notificação:", error)
+                            // Função para enviar notificação para um criador específico
+                            export async function notifySubscription(creatorId: string, data: any) {
+                              const creatorConnections = connections.get(creatorId)
+                              if (!creatorConnections) return
+                              const message = \`data: \${JSON.stringify(data)}\n\n\`
+                              for (const controller of creatorConnections) {
+                                try {
+                                  controller.enqueue(new TextEncoder().encode(message))
+                                } catch (error) {
+                                  console.error("Erro ao enviar notificação:", error)
+                                }
                               }
                             }
-                          }
 
-                          // Função para adicionar uma conexão
-                          export function addConnection(creatorId: string, controller: ReadableStreamController<Uint8Array>) {
-                            if (!connections.has(creatorId)) {
-                              connections.set(creatorId, new Set())
+                            // Função para adicionar uma conexão
+                            export function addConnection(
+                              creatorId: string, controller: ReadableStreamController<Uint8Array>
+                              ) {
+                              if (!connections.has(creatorId)) {
+                                connections.set(creatorId, new Set())
+                              }
+                              connections.get(creatorId)!.add(controller)
                             }
-                            connections.get(creatorId)!.add(controller)
-                          }
 
-                          // Função para remover uma conexão
-                          export function removeConnection(creatorId: string, controller: ReadableStreamController<Uint8Array>) {
-                            const creatorConnections = connections.get(creatorId)
-                            if (creatorConnections) {
-                              creatorConnections.delete(controller)
-                              if (creatorConnections.size === 0) {
-                                connections.delete(creatorId)
+                            // Função para remover uma conexão
+                            export function removeConnection(
+                              creatorId: string, controller: ReadableStreamController<Uint8Array>
+                              ) {
+                              const creatorConnections = connections.get(creatorId)
+                              if (creatorConnections) {
+                                creatorConnections.delete(controller)
+                                if (creatorConnections.size === 0) {
+                                  connections.delete(creatorId)
+                                }
                               }
                             }
-                          }`}
+                          `}
                         </pre>
                       </div>
                     </div>
@@ -1609,19 +1626,18 @@ export default function DocsPage() {
                       </p>
                       <div className="overflow-x-auto">
                         <pre className="text-sm p-4 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                          {`# Configuração do banco de dados
-                          DATABASE_URL="postgresql://usuario:senha@localhost:5432/creatorsub"
-
-                          # Configuração do NextAuth
-                          NEXTAUTH_URL="https://seu-dominio.com"
-                          NEXTAUTH_SECRET="sua-chave-secreta-gerada-com-openssl"
-
-                          # Configuração do Mercado Pago
-                          MERCADO_PAGO_ACCESS_TOKEN="seu-token-de-acesso-do-mercado-pago"
-
-                          # Configuração do Google OAuth (opcional)
-                          GOOGLE_CLIENT_ID="seu-client-id-do-google"
-                          GOOGLE_CLIENT_SECRET="seu-client-secret-do-google"`}
+                          {`
+                            # Configuração do banco de dados
+                            DATABASE_URL="postgresql://usuario:senha@localhost:5432/creatorsub"
+                            # Configuração do NextAuth
+                            NEXTAUTH_URL="https://seu-dominio.com"
+                            NEXTAUTH_SECRET="sua-chave-secreta-gerada-com-openssl"
+                            # Configuração do Mercado Pago
+                            MERCADO_PAGO_ACCESS_TOKEN="seu-token-de-acesso-do-mercado-pago"
+                            # Configuração do Google OAuth (opcional)
+                            GOOGLE_CLIENT_ID="seu-client-id-do-google"
+                            GOOGLE_CLIENT_SECRET="seu-client-secret-do-google"
+                          `}
                         </pre>
                       </div>
                     </div>
@@ -1663,28 +1679,30 @@ export default function DocsPage() {
                       </p>
                       <div className="overflow-x-auto">
                         <pre className="text-sm p-4 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                          {`# Clone o repositório
-                          git clone https://github.com/seu-usuario/creatorsub.git
-                          cd creatorsub
-                          
-                          # Instale as dependências
-                          npm install
-                          
-                          # Configure as variáveis de ambiente
-                          cp .env.example .env
-                          # Edite o arquivo .env com suas configurações
-                          
-                          # Gere o cliente Prisma
-                          npx prisma generate
-                          
-                          # Execute as migrações do banco de dados
-                          npx prisma migrate deploy
-                          
-                          # Construa a aplicação
-                          npm run build
-                          
-                          # Inicie o servidor
-                          npm start`}
+                          {`
+                            # Clone o repositório
+                            git clone https://github.com/seu-usuario/creatorsub.git
+                            cd creatorsub
+                            ---
+                            # Instale as dependências
+                            npm install
+                            ---
+                            # Configure as variáveis de ambiente
+                            cp .env.example .env
+                            # Edite o arquivo .env com suas configurações
+                            ---
+                            # Gere o cliente Prisma
+                            npx prisma generate
+                            ---
+                            # Execute as migrações do banco de dados
+                            npx prisma migrate deploy
+                            ---
+                            # Construa a aplicação
+                            npm run build
+                            ---
+                            # Inicie o servidor
+                            npm start
+                          `}
                         </pre>
                       </div>
                     </div>
@@ -1718,118 +1736,8 @@ export default function DocsPage() {
                     </div>
                   </CardContent>
                 </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Monitoramento e Manutenção</CardTitle>
-                    <CardDescription>
-                      Práticas recomendadas para manter a aplicação em produção
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <h3 className="text-lg font-semibold">Monitoramento</h3>
-                      <ul className="space-y-2">
-                        <li className="flex items-start gap-2">
-                          <Settings className="h-5 w-5 text-primary mt-0.5" />
-                          <div>
-                            <span className="font-medium">
-                              Logs da Aplicação:
-                            </span>
-                            <p className="text-sm text-muted-foreground">
-                              Monitore os logs da aplicação para identificar
-                              erros e problemas.
-                            </p>
-                          </div>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <Settings className="h-5 w-5 text-primary mt-0.5" />
-                          <div>
-                            <span className="font-medium">
-                              Monitoramento de Desempenho:
-                            </span>
-                            <p className="text-sm text-muted-foreground">
-                              Utilize ferramentas como New Relic, Datadog ou
-                              Vercel Analytics para monitorar o desempenho.
-                            </p>
-                          </div>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <Settings className="h-5 w-5 text-primary mt-0.5" />
-                          <div>
-                            <span className="font-medium">Alertas:</span>
-                            <p className="text-sm text-muted-foreground">
-                              Configure alertas para ser notificado sobre
-                              problemas críticos.
-                            </p>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                    gs da aplicação para identificar erros e problemas.
-                    <div className="space-y-2">
-                      <h3 className="text-lg font-semibold">Backups</h3>
-                      <p className="text-sm text-muted-foreground">
-                        Implemente uma estratégia de backup para o banco de
-                        dados:
-                      </p>
-                      <ul className="space-y-2">
-                        <li className="flex items-start gap-2">
-                          <Database className="h-5 w-5 text-primary mt-0.5" />
-                          <span>
-                            Realize backups diários do banco de dados
-                            PostgreSQL.
-                          </span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <Database className="h-5 w-5 text-primary mt-0.5" />
-                          <span>
-                            Armazene backups em locais seguros e geograficamente
-                            distribuídos.
-                          </span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <Database className="h-5 w-5 text-primary mt-0.5" />
-                          <span>
-                            Teste regularmente a restauração dos backups para
-                            garantir sua integridade.
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="space-y-2">
-                      <h3 className="text-lg font-semibold">Atualizações</h3>
-                      <p className="text-sm text-muted-foreground">
-                        Mantenha a aplicação atualizada e segura:
-                      </p>
-                      <ul className="space-y-2">
-                        <li className="flex items-start gap-2">
-                          <GitBranch className="h-5 w-5 text-primary mt-0.5" />
-                          <span>
-                            Atualize regularmente as dependências para corrigir
-                            vulnerabilidades de segurança.
-                          </span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <GitBranch className="h-5 w-5 text-primary mt-0.5" />
-                          <span>
-                            Implemente um pipeline de CI/CD para automatizar
-                            testes e implantações.
-                          </span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <GitBranch className="h-5 w-5 text-primary mt-0.5" />
-                          <span>
-                            Utilize ambientes de staging para testar
-                            atualizações antes de aplicá-las em produção.
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                  </CardContent>
-                </Card>
               </TabsContent>
-
+              {/* Segurança */}
               <TabsContent value="security" className="space-y-8">
                 <Card>
                   <CardHeader>
@@ -1905,26 +1813,24 @@ export default function DocsPage() {
                       </h3>
                       <div className="overflow-x-auto">
                         <pre className="text-sm p-4 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                          {`// Exemplo de proteção de rota no servidor
-                          import { getServerSession } from "next-auth"
-                          import { redirect } from "next/navigation"
-                          import { authOptions } from "@/utils/authOptions"
-
-                          export default async function ProtectedPage() {
-                            const session = await getServerSession(authOptions)
-
-                            if (!session) {
-                              redirect("/login")
+                          {`
+                            // Exemplo de proteção de rota no servidor
+                            import { getServerSession } from "next-auth"
+                            import { redirect } from "next/navigation"
+                            import { authOptions } from "@/utils/authOptions"
+                            export default async function ProtectedPage() {
+                              const session = await getServerSession(authOptions)
+                              if (!session) {
+                                redirect("/login")
+                              }
+                              // Verificação adicional para rotas específicas de criadores
+                              if (requiredCreatorAccess && !session.user.isCreator) {
+                                redirect("/dashboard")
+                              }
+                              // Conteúdo da página protegida
+                              return <div>Conteúdo protegido</div>
                             }
-
-                            // Verificação adicional para rotas específicas de criadores
-                            if (requiredCreatorAccess && !session.user.isCreator) {
-                              redirect("/dashboard")
-                            }
-
-                            // Conteúdo da página protegida
-                            return <div>Conteúdo protegido</div>
-                          }`}
+                          `}
                         </pre>
                       </div>
                     </div>
