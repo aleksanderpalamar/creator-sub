@@ -132,10 +132,15 @@ export default function NewPlanPage() {
               type="button"
               variant="outline"
               onClick={() => router.back()}
+              className="cursor-pointer"
             >
               Cancelar
             </Button>
-            <Button type="submit" disabled={isLoading}>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="bg-violet-500 hover:bg-violet-600 transition-colors duration-300 cursor-pointer"
+            >
               {isLoading ? "Criando..." : "Criar Plano"}
             </Button>
           </CardFooter>

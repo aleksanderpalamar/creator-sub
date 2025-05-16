@@ -23,7 +23,8 @@ export function UserModeToggle() {
     if (val === "creator") {
       if (pathname !== "/dashboard") router.push("/dashboard");
     } else if (val === "subscriber") {
-      if (pathname !== "/dashboard/subscriptions") router.push("/dashboard/subscriptions");
+      if (pathname !== "/dashboard/subscriptions")
+        router.push("/dashboard/subscriptions");
     }
   };
 
@@ -32,14 +33,12 @@ export function UserModeToggle() {
       <span className="text-sm text-muted-foreground">
         {mode === "creator" ? "Criador" : "Assinante"}
       </span>
-      <ToggleGroup
-        type="single"
-        value={mode}
-        onValueChange={handleChange}
-      >
+      <ToggleGroup type="single" value={mode} onValueChange={handleChange}>
         <Switch
           checked={mode === "creator"}
-          onCheckedChange={(checked) => setMode(checked ? "creator" : "subscriber")}
+          onCheckedChange={(checked) =>
+            setMode(checked ? "creator" : "subscriber")
+          }
         />
       </ToggleGroup>
     </div>

@@ -78,7 +78,7 @@ export function CheckPaymentStatus({ paymentId }: CheckPaymentStatusProps) {
       disabled={isLoading}
       size="sm"
       variant="outline"
-      className="cursor-pointer"
+      className="border-violet-500 text-violet-500 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-300 cursor-pointer"
     >
       {isLoading ? (
         <>

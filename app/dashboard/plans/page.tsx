@@ -1,5 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import prisma from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
 import { authOptions } from "@/utils/authOptions";
@@ -39,7 +46,10 @@ export default async function PlansPage() {
             Gerencie os planos de assinatura disponíveis para os seus criadores.
           </p>
         </div>
-        <Button asChild>
+        <Button
+          asChild
+          className="bg-violet-500 hover:bg-violet-600 transition-colors duration-300"
+        >
           <Link href="/dashboard/plans/new">
             <PlusCircle className="mr-2 h-4 w-4" />
             Nova Assinatura
@@ -50,10 +60,14 @@ export default async function PlansPage() {
         <Card>
           <CardHeader>
             <CardTitle>Nenhum plano encontrado</CardTitle>
-            <CardDescription>Você ainda não criou nenhum plano de assinatura.</CardDescription>
+            <CardDescription>
+              Você ainda não criou nenhum plano de assinatura.
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">Crie seu primeiro plano para começar a receber assinaturas.</p>
+            <p className="text-muted-foreground">
+              Crie seu primeiro plano para começar a receber assinaturas.
+            </p>
           </CardContent>
           <CardFooter>
             <Button asChild>
@@ -70,10 +84,14 @@ export default async function PlansPage() {
             <Card key={plan.id}>
               <CardHeader>
                 <CardTitle>{plan.name}</CardTitle>
-                <CardDescription>{formatCurrency(plan.price)} / mês</CardDescription>
+                <CardDescription>
+                  {formatCurrency(plan.price)} / mês
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground">{plan.description || "Sem descrição"}</p>
+                <p className="text-sm text-muted-foreground">
+                  {plan.description || "Sem descrição"}
+                </p>
                 {plan.benefits && (
                   <div className="mt-4">
                     <h4 className="text-sm font-medium">Benefícios:</h4>

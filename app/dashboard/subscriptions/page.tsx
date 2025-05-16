@@ -16,6 +16,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { CancelSubscriptionButton } from "@/components/cancel-subscriptions-button";
+import { Badge } from "@/components/ui/badge";
 
 function formatCurrency(amount: number): string {
   return new Intl.NumberFormat("pt-BR", {
@@ -147,7 +148,11 @@ export default async function SubscriptionsPage() {
                         </div>
                       </CardContent>
                       <CardFooter className="flex justify-between">
-                        <Button variant="outline" asChild>
+                        <Button
+                          variant="outline"
+                          asChild
+                          className="border-violet-500 text-violet-500 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-300 cursor-pointer"
+                        >
                           <Link
                             href={`/dashboard/creator/${subscription.creatorId}`}
                           >
@@ -207,7 +212,14 @@ export default async function SubscriptionsPage() {
                             </p>
                             <p className="text-sm">
                               <span className="font-medium">Status:</span>{" "}
-                              <span className="text-yellow-600">Pendente</span>
+                              {subscription.status === "pending" && (
+                                <Badge
+                                  variant="outline"
+                                  className="text-yellow-500 border-yellow-500"
+                                >
+                                  Pendente
+                                </Badge>
+                              )}
                             </p>
                           </div>
 
@@ -234,8 +246,13 @@ export default async function SubscriptionsPage() {
                           )}
                         </div>
                       </CardContent>
-                      <CardFooter className="flex justify-between">
-                        <Button variant="outline" asChild size="sm">
+                      <CardFooter className="flex flex-wrap gap-1.5 justify-between">
+                        <Button
+                          variant="outline"
+                          asChild
+                          size="sm"
+                          className="border-violet-500 text-violet-500 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-300 cursor-pointer"
+                        >
                           <Link
                             href={`/dashboard/creator/${subscription.creatorId}`}
                           >
@@ -304,7 +321,11 @@ export default async function SubscriptionsPage() {
                         </div>
                       </CardContent>
                       <CardFooter>
-                        <Button variant="outline" asChild className="w-full">
+                        <Button
+                          variant="outline"
+                          asChild
+                          className="border-violet-500 text-violet-500 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-300"
+                        >
                           <Link
                             href={`/dashboard/creator/${subscription.creatorId}`}
                           >

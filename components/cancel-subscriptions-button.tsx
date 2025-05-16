@@ -63,7 +63,9 @@ export function CancelSubscriptionButton({
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" className="cursor-pointer">Cancelar</Button>
+        <Button variant="destructive" className="cursor-pointer">
+          Cancelar
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -81,6 +83,7 @@ export function CancelSubscriptionButton({
               handleCancelSubscription();
             }}
             disabled={isLoading}
+            className="bg-violet-500 hover:bg-violet-600 transition-colors duration-300 cursor-pointer"
           >
             {isLoading ? "Cancelando..." : "Confirmar Cancelamento"}
           </AlertDialogAction>

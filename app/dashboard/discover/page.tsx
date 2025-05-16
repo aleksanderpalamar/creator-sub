@@ -68,18 +68,28 @@ export default async function DiscoverPage() {
             <Card key={creator.id}>
               <CardHeader>
                 <Avatar className="h-12 w-12">
-                  <AvatarImage src={creator.image || ""} alt={creator.name || ""} />
+                  <AvatarImage
+                    src={creator.image || ""}
+                    alt={creator.name || ""}
+                  />
                   <AvatarFallback>{creator.name}</AvatarFallback>
                 </Avatar>
                 <CardTitle>{creator.name}</CardTitle>
-                <CardDescription>{creator.subscriptionPlans[0]?.name}</CardDescription>
+                <CardDescription>
+                  {creator.subscriptionPlans[0]?.name}
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <p>{creator.subscriptionPlans[0]?.description}</p>
               </CardContent>
               <CardFooter>
                 <Link href={`/dashboard/creator/${creator.id}`}>
-                  <Button variant="outline">Ver Planos</Button>
+                  <Button
+                    variant="outline"
+                    className="border-violet-500 text-violet-500 hover:bg-violet-50 hover:text-violet-600 cursor-pointer transition-colors duration-300"
+                  >
+                    Ver Planos
+                  </Button>
                 </Link>
               </CardFooter>
             </Card>
