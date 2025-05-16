@@ -8,10 +8,11 @@ import {
   LayoutDashboard,
   CreditCard,
   Users,
-  Settings,
   BarChart,
   PlusCircle,
 } from "lucide-react";
+import { ThemeSwitch } from "./theme-switch";
+import { useUserMode } from "@/context/user-mode-context";
 
 interface NavProps {
   vertical?: boolean;
@@ -20,7 +21,8 @@ interface NavProps {
 export function DashboardNav({ vertical = false }: NavProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
-  const isCreator = session?.user?.isCreator;
+  const { mode } = useUserMode();
+  const isCreator = mode === "creator";
 
   const routes = [
     {
@@ -80,37 +82,34 @@ export function DashboardNav({ vertical = false }: NavProps) {
     });
   }
 
-  // Configurações para todos os usuários
-  routes.push({
-    href: "/dashboard/settings",
-    label: "Configurações",
-    icon: Settings,
-    active: pathname === "/dashboard/settings",
-  });
-
   // Estilo para navegação vertical (sidebar)
   if (vertical) {
     return (
-      <nav className="flex flex-col space-y-1 w-full">
-        {routes.map((route) => {
-          const Icon = route.icon;
-          return (
-            <Link
-              key={route.href}
-              href={route.href}
-              className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                route.active
-                  ? "bg-violet-500 text-primary-foreground"
-                  : "text-muted-foreground hover:bg-violet-50 hover:text-violet-500"
-              )}
-            >
-              <Icon className="h-5 w-5" />
-              <span>{route.label}</span>
-            </Link>
-          );
-        })}
-      </nav>
+      <div className="flex flex-col justify-between h-full">
+        <nav className="flex flex-col space-y-1 w-full">
+          {routes.map((route) => {
+            const Icon = route.icon;
+            return (
+              <Link
+                key={route.href}
+                href={route.href}
+                className={cn(
+                  "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                  route.active
+                    ? "bg-violet-500 text-primary-foreground"
+                    : "text-muted-foreground hover:bg-violet-50 hover:text-violet-500"
+                )}
+              >
+                <Icon className="h-5 w-5" />
+                <span>{route.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+        <div className="flex items-center justify-between w-full border-t-1 p-2">
+          <ThemeSwitch />
+        </div>
+      </div>
     );
   }
 
