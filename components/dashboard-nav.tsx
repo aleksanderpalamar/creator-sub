@@ -11,7 +11,6 @@ import {
   BarChart,
   PlusCircle,
 } from "lucide-react";
-import { ThemeSwitch } from "./theme-switch";
 import { useUserMode } from "@/context/user-mode-context";
 
 interface NavProps {
@@ -106,9 +105,6 @@ export function DashboardNav({ vertical = false }: NavProps) {
             );
           })}
         </nav>
-        <div className="flex items-center justify-between w-full border-t-1 p-2">
-          <ThemeSwitch />
-        </div>
       </div>
     );
   }

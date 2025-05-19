@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,16 +10,18 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { signOut } from "next-auth/react"
-import Link from "next/link"
+} from "@/components/ui/dropdown-menu";
+import { signOut } from "next-auth/react";
+import Link from "next/link";
+import { ThemeSwitch } from "./theme-switch";
+import { UserModeToggle } from "./user-mode-toggle";
 
 interface UserNavProps {
-  user: any
+  user: any;
 }
 
 export function UserNav({ user }: UserNavProps) {
-  if (!user) return null
+  if (!user) return null;
 
   const initials = user.name
     ? user.name
@@ -27,7 +29,7 @@ export function UserNav({ user }: UserNavProps) {
         .map((n: string) => n[0])
         .join("")
         .toUpperCase()
-    : "U"
+    : "U";
 
   return (
     <DropdownMenu>
@@ -43,7 +45,9 @@ export function UserNav({ user }: UserNavProps) {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">{user.name}</p>
-            <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+            <p className="text-xs leading-none text-muted-foreground">
+              {user.email}
+            </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -54,12 +58,22 @@ export function UserNav({ user }: UserNavProps) {
           <DropdownMenuItem asChild>
             <Link href="/dashboard/settings">Configurações</Link>
           </DropdownMenuItem>
+          <DropdownMenuSeparator></DropdownMenuSeparator>
+          <DropdownMenuItem asChild>
+            <div className="flex items-center justify-between w-full">
+              <ThemeSwitch />
+              <UserModeToggle />
+            </div>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer" onSelect={() => signOut({ callbackUrl: "/" })}>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onSelect={() => signOut({ callbackUrl: "/" })}
+        >
           Sair
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

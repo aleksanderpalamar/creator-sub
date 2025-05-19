@@ -1,7 +1,6 @@
 import { DashboardNav } from "@/components/dashboard-nav";
 import { Logo } from "@/components/header/logo";
 import { MobileNav } from "@/components/mobile-nav";
-import { UserModeToggle } from "@/components/user-mode-toggle";
 import { UserNav } from "@/components/user-nav";
 import { UserModeProvider } from "@/context/user-mode-context";
 import { authOptions } from "@/utils/authOptions";
@@ -28,7 +27,6 @@ export default async function DashboardLayout({
             <Logo />
             <MobileNav />
             <div className="ml-auto flex items-center space-x-4">
-              <UserModeToggle />
               <UserNav user={session.user} />
             </div>
           </div>
