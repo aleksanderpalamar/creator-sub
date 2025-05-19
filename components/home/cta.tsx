@@ -27,7 +27,8 @@ export const CallToActions = () => {
               size="lg"
               variant="outline"
               asChild
-              className="text-zinc-950 dark:text-white"
+              className="border-violet-500 text-violet-500 bg-violet-500/20 hover:bg-violet-500/25 hover:text-violet-600
+              dark:border-violet-500"
             >
               <Link href="/login">Fazer login</Link>
             </Button>

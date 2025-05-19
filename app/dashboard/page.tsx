@@ -191,21 +191,21 @@ export default async function DashboardPage() {
               <Button
                 asChild
                 variant="outline"
-                className="w-full hover:bg-violet-50 hover:text-violet-500"
+                className="w-full hover:bg-violet-50 hover:text-violet-600 border-violet-500 text-violet-500 dark:border-violet-500"
               >
                 <Link href="/dashboard/plans">Gerenciar Assinaturas</Link>
               </Button>
               <Button
                 asChild
                 variant="outline"
-                className="w-full hover:bg-violet-50 hover:text-violet-500"
+                className="w-full hover:bg-violet-50 hover:text-violet-600 border-violet-500 text-violet-500 dark:border-violet-500"
               >
                 <Link href="/dashboard/subscribers">Ver Assinantes</Link>
               </Button>
               <Button
                 asChild
                 variant="outline"
-                className="w-full hover:bg-violet-50 hover:text-violet-500"
+                className="w-full hover:bg-violet-50 hover:text-violet-600 border-violet-500 text-violet-500 dark:border-violet-500"
               >
                 <Link href="/dashboard/settings">Configurar Pix</Link>
               </Button>

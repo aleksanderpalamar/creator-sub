@@ -70,7 +70,10 @@ export default async function PlansPage() {
             </p>
           </CardContent>
           <CardFooter>
-            <Button asChild>
+            <Button
+              asChild
+              className="bg-violet-500 hover:bg-violet-600 transition-colors duration-300"
+            >
               <Link href="/dashboard/plans/new">
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Nova assinatura
@@ -107,7 +110,11 @@ export default async function PlansPage() {
                 )}
               </CardContent>
               <CardFooter className="flex justify-between">
-                <Button variant="outline" asChild>
+                <Button
+                  variant="outline"
+                  asChild
+                  className="border-violet-500 text-violet-500 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-300 dark:border-violet-500"
+                >
                   <Link href={`/dashboard/plans/${plan.id}/edit`}>
                     <Edit className="mr-2 h-4 w-4" />
                     Editar

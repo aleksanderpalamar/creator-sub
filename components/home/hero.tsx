@@ -27,7 +27,8 @@ export const Hero = () => {
               <Button
                 variant="outline"
                 size="lg"
-                className="border-violet-500 hover:bg-violet-50 text-violet-500 hover:text-violet-500"
+                className="border-violet-500 hover:bg-violet-50 text-violet-500 hover:text-violet-600
+                dark:border-violet-500"
                 asChild
               >
                 <Link href="/login">Já tenho uma conta</Link>

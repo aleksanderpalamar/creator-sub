@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { signIn } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
@@ -64,6 +65,13 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
+          <Image
+            src="/assets/streamer.png"
+            alt="Streamer"
+            width={500}
+            height={500}
+            className="overflow-hidden object-cover w-50 h-50"
+          />
           <CardTitle className="text-2xl font-bold">Login</CardTitle>
           <CardDescription>
             Entre com suas credenciais para acessar sua conta

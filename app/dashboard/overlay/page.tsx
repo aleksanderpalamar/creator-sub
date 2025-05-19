@@ -1,26 +1,39 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-import { Switch } from "@/components/ui/switch"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useToast } from "@/hooks/use-toast"
-import type { OverlayConfig } from "@/types/overlay"
-import { SubscriptionNotification } from "@/components/overlay/subscription-notification"
-import { Copy, ExternalLink } from "lucide-react"
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
+import type { OverlayConfig } from "@/types/overlay";
+import { SubscriptionNotification } from "@/components/overlay/subscription-notification";
+import { Copy, ExternalLink } from "lucide-react";
 
 export default function OverlayConfigPage() {
-  const { data: session } = useSession()
-  const router = useRouter()
-  const { toast } = useToast()
-  const [isLoading, setIsLoading] = useState(false)
+  const { data: session } = useSession();
+  const router = useRouter();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const [config, setConfig] = useState<OverlayConfig>({
     titleText: "Novo Assinante!",
     backgroundColor: "rgba(0, 0, 0, 0.7)",
@@ -35,50 +48,52 @@ export default function OverlayConfigPage() {
     displayDuration: 5,
     soundEnabled: false,
     soundUrl: "",
-  })
-  const [previewVisible, setPreviewVisible] = useState(false)
-  const [configFetched, setConfigFetched] = useState(false)
+  });
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [configFetched, setConfigFetched] = useState(false);
 
   useEffect(() => {
     if (!session?.user || configFetched) {
-      return
+      return;
     }
 
-    console.log("Status de criador:", session.user.isCreator)
+    console.log("Status de criador:", session.user.isCreator);
 
     if (session.user.isCreator === false) {
       toast.error({
         title: "Acesso restrito",
         description: "Esta página é apenas para criadores de conteúdo.",
-      })
-      router.push("/dashboard")
-      return
+      });
+      router.push("/dashboard");
+      return;
     }
 
     // Carregar configurações salvas
     const fetchConfig = async () => {
       try {
-        const response = await fetch(`/api/overlay/config?creatorId=${session.user.id}`)
+        const response = await fetch(
+          `/api/overlay/config?creatorId=${session.user.id}`
+        );
         if (response.ok) {
-          const data = await response.json()
+          const data = await response.json();
           if (data.config) {
-            setConfig(data.config)
+            setConfig(data.config);
           }
-          setConfigFetched(true) // Marcar que já buscamos as configurações
+          setConfigFetched(true); // Marcar que já buscamos as configurações
         }
       } catch (error) {
-        console.error("Erro ao carregar configurações:", error)
-        setConfigFetched(true) // Marcar mesmo em caso de erro para evitar loops
+        console.error("Erro ao carregar configurações:", error);
+        setConfigFetched(true); // Marcar mesmo em caso de erro para evitar loops
       }
-    }
+    };
 
-    fetchConfig()
-  }, [session, router, toast, configFetched])
+    fetchConfig();
+  }, [session, router, toast, configFetched]);
 
   const handleSaveConfig = async () => {
-    if (!session?.user?.id) return
+    if (!session?.user?.id) return;
 
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
       const response = await fetch("/api/overlay/config", {
@@ -90,60 +105,62 @@ export default function OverlayConfigPage() {
           creatorId: session.user.id,
           config,
         }),
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Erro ao salvar configurações")
+        throw new Error("Erro ao salvar configurações");
       }
 
       toast.success({
         title: "Configurações salvas",
         description: "As configurações do overlay foram salvas com sucesso",
-      })
+      });
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toast.error({
         title: "Erro ao salvar",
         description: "Ocorreu um erro ao salvar as configurações",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleShowPreview = () => {
-    setPreviewVisible(true)
-    setTimeout(
-      () => {
-        setPreviewVisible(false)
-      },
-      (config.displayDuration || 5) * 1000,
-    )
-  }
+    setPreviewVisible(true);
+    setTimeout(() => {
+      setPreviewVisible(false);
+    }, (config.displayDuration || 5) * 1000);
+  };
 
   const copyOverlayUrl = () => {
-    if (!session?.user?.id) return
+    if (!session?.user?.id) return;
 
-    const url = `${window.location.origin}/overlay/${session.user.id}`
-    navigator.clipboard.writeText(url)
+    const url = `${window.location.origin}/overlay/${session.user.id}`;
+    navigator.clipboard.writeText(url);
     toast.success({
       title: "URL copiada",
       description: "URL do overlay copiada para a área de transferência",
-    })
-  }
+    });
+  };
 
   if (!session?.user?.id) {
-    return <div>Carregando...</div>
+    return <div>Carregando...</div>;
   }
 
-  const overlayUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/overlay/${session.user.id}`
+  const overlayUrl = `${
+    typeof window !== "undefined" ? window.location.origin : ""
+  }/overlay/${session.user.id}`;
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Configuração do Overlay</h1>
+        <h1 className="text-3xl font-bold tracking-tight">
+          Configuração do Overlay
+        </h1>
         <p className="text-muted-foreground">
-          Personalize o overlay de notificações para usar no OBS ou outro software de streaming.
+          Personalize o overlay de notificações para usar no OBS ou outro
+          software de streaming.
         </p>
       </div>
 
@@ -151,7 +168,8 @@ export default function OverlayConfigPage() {
         <CardHeader>
           <CardTitle>URL do Overlay</CardTitle>
           <CardDescription>
-            Adicione esta URL como uma fonte de navegador no OBS para exibir notificações de assinatura.
+            Adicione esta URL como uma fonte de navegador no OBS para exibir
+            notificações de assinatura.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -169,7 +187,7 @@ export default function OverlayConfigPage() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 grid-cols-2 md:grid-cols-1">
         <div>
           <Tabs defaultValue="appearance">
             <TabsList className="grid w-full grid-cols-3">
@@ -185,18 +203,28 @@ export default function OverlayConfigPage() {
                   <Input
                     id="backgroundColor"
                     type="color"
-                    value={config.backgroundColor?.replace("rgba(0, 0, 0, 0.7)", "#000000") || "#000000"}
-                    onChange={(e) => setConfig({ ...config, backgroundColor: e.target.value })}
+                    value={
+                      config.backgroundColor?.replace(
+                        "rgba(0, 0, 0, 0.7)",
+                        "#000000"
+                      ) || "#000000"
+                    }
+                    onChange={(e) =>
+                      setConfig({ ...config, backgroundColor: e.target.value })
+                    }
                     className="w-12 h-10 p-1"
                   />
                   <Input
                     value={config.backgroundColor}
-                    onChange={(e) => setConfig({ ...config, backgroundColor: e.target.value })}
+                    onChange={(e) =>
+                      setConfig({ ...config, backgroundColor: e.target.value })
+                    }
                     placeholder="rgba(0, 0, 0, 0.7)"
                   />
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Você pode usar rgba() para transparência, ex: rgba(0, 0, 0, 0.7)
+                  Você pode usar rgba() para transparência, ex: rgba(0, 0, 0,
+                  0.7)
                 </p>
               </div>
 
@@ -207,12 +235,16 @@ export default function OverlayConfigPage() {
                     id="textColor"
                     type="color"
                     value={config.textColor || "#ffffff"}
-                    onChange={(e) => setConfig({ ...config, textColor: e.target.value })}
+                    onChange={(e) =>
+                      setConfig({ ...config, textColor: e.target.value })
+                    }
                     className="w-12 h-10 p-1"
                   />
                   <Input
                     value={config.textColor}
-                    onChange={(e) => setConfig({ ...config, textColor: e.target.value })}
+                    onChange={(e) =>
+                      setConfig({ ...config, textColor: e.target.value })
+                    }
                     placeholder="#ffffff"
                   />
                 </div>
@@ -225,12 +257,16 @@ export default function OverlayConfigPage() {
                     id="accentColor"
                     type="color"
                     value={config.accentColor || "#9333ea"}
-                    onChange={(e) => setConfig({ ...config, accentColor: e.target.value })}
+                    onChange={(e) =>
+                      setConfig({ ...config, accentColor: e.target.value })
+                    }
                     className="w-12 h-10 p-1"
                   />
                   <Input
                     value={config.accentColor}
-                    onChange={(e) => setConfig({ ...config, accentColor: e.target.value })}
+                    onChange={(e) =>
+                      setConfig({ ...config, accentColor: e.target.value })
+                    }
                     placeholder="#9333ea"
                   />
                 </div>
@@ -240,7 +276,9 @@ export default function OverlayConfigPage() {
                 <Label htmlFor="fontFamily">Fonte</Label>
                 <Select
                   value={config.fontFamily || "sans-serif"}
-                  onValueChange={(value) => setConfig({ ...config, fontFamily: value })}
+                  onValueChange={(value) =>
+                    setConfig({ ...config, fontFamily: value })
+                  }
                 >
                   <SelectTrigger id="fontFamily">
                     <SelectValue placeholder="Selecione uma fonte" />
@@ -250,8 +288,12 @@ export default function OverlayConfigPage() {
                     <SelectItem value="serif">Serif</SelectItem>
                     <SelectItem value="monospace">Monospace</SelectItem>
                     <SelectItem value="'Roboto', sans-serif">Roboto</SelectItem>
-                    <SelectItem value="'Open Sans', sans-serif">Open Sans</SelectItem>
-                    <SelectItem value="'Montserrat', sans-serif">Montserrat</SelectItem>
+                    <SelectItem value="'Open Sans', sans-serif">
+                      Open Sans
+                    </SelectItem>
+                    <SelectItem value="'Montserrat', sans-serif">
+                      Montserrat
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -262,9 +304,13 @@ export default function OverlayConfigPage() {
                   <Switch
                     id="roundedCorners"
                     checked={config.roundedCorners}
-                    onCheckedChange={(checked) => setConfig({ ...config, roundedCorners: checked })}
+                    onCheckedChange={(checked) =>
+                      setConfig({ ...config, roundedCorners: checked })
+                    }
                   />
-                  <span>{config.roundedCorners ? "Ativado" : "Desativado"}</span>
+                  <span>
+                    {config.roundedCorners ? "Ativado" : "Desativado"}
+                  </span>
                 </div>
               </div>
             </TabsContent>
@@ -275,7 +321,9 @@ export default function OverlayConfigPage() {
                 <Input
                   id="titleText"
                   value={config.titleText || ""}
-                  onChange={(e) => setConfig({ ...config, titleText: e.target.value })}
+                  onChange={(e) =>
+                    setConfig({ ...config, titleText: e.target.value })
+                  }
                   placeholder="Novo Assinante!"
                 />
               </div>
@@ -286,7 +334,9 @@ export default function OverlayConfigPage() {
                   <Input
                     id="titleSize"
                     value={config.titleSize || "24px"}
-                    onChange={(e) => setConfig({ ...config, titleSize: e.target.value })}
+                    onChange={(e) =>
+                      setConfig({ ...config, titleSize: e.target.value })
+                    }
                     placeholder="24px"
                   />
                 </div>
@@ -298,7 +348,9 @@ export default function OverlayConfigPage() {
                   <Input
                     id="messageSize"
                     value={config.messageSize || "18px"}
-                    onChange={(e) => setConfig({ ...config, messageSize: e.target.value })}
+                    onChange={(e) =>
+                      setConfig({ ...config, messageSize: e.target.value })
+                    }
                     placeholder="18px"
                   />
                 </div>
@@ -310,7 +362,9 @@ export default function OverlayConfigPage() {
                 <Label htmlFor="position">Posição</Label>
                 <Select
                   value={config.position || "bottom-right"}
-                  onValueChange={(value) => setConfig({ ...config, position: value as any })}
+                  onValueChange={(value) =>
+                    setConfig({ ...config, position: value as any })
+                  }
                 >
                   <SelectTrigger id="position">
                     <SelectValue placeholder="Selecione uma posição" />
@@ -318,26 +372,38 @@ export default function OverlayConfigPage() {
                   <SelectContent>
                     <SelectItem value="top-left">Superior Esquerdo</SelectItem>
                     <SelectItem value="top-right">Superior Direito</SelectItem>
-                    <SelectItem value="bottom-left">Inferior Esquerdo</SelectItem>
-                    <SelectItem value="bottom-right">Inferior Direito</SelectItem>
+                    <SelectItem value="bottom-left">
+                      Inferior Esquerdo
+                    </SelectItem>
+                    <SelectItem value="bottom-right">
+                      Inferior Direito
+                    </SelectItem>
                     <SelectItem value="center">Centro</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="notificationWidth">Largura da Notificação</Label>
+                <Label htmlFor="notificationWidth">
+                  Largura da Notificação
+                </Label>
                 <Input
                   id="notificationWidth"
                   value={config.notificationWidth || "400px"}
-                  onChange={(e) => setConfig({ ...config, notificationWidth: e.target.value })}
+                  onChange={(e) =>
+                    setConfig({ ...config, notificationWidth: e.target.value })
+                  }
                   placeholder="400px"
                 />
-                <p className="text-xs text-muted-foreground">Use px, %, ou outro valor CSS válido (ex: 400px, 50%)</p>
+                <p className="text-xs text-muted-foreground">
+                  Use px, %, ou outro valor CSS válido (ex: 400px, 50%)
+                </p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="displayDuration">Duração da Exibição (segundos)</Label>
+                <Label htmlFor="displayDuration">
+                  Duração da Exibição (segundos)
+                </Label>
                 <div className="flex items-center space-x-4">
                   <Slider
                     id="displayDuration"
@@ -345,10 +411,14 @@ export default function OverlayConfigPage() {
                     max={15}
                     step={1}
                     value={[config.displayDuration || 5]}
-                    onValueChange={(value) => setConfig({ ...config, displayDuration: value[0] })}
+                    onValueChange={(value) =>
+                      setConfig({ ...config, displayDuration: value[0] })
+                    }
                     className="flex-1"
                   />
-                  <span className="w-12 text-center">{config.displayDuration || 5}s</span>
+                  <span className="w-12 text-center">
+                    {config.displayDuration || 5}s
+                  </span>
                 </div>
               </div>
 
@@ -358,7 +428,9 @@ export default function OverlayConfigPage() {
                   <Switch
                     id="soundEnabled"
                     checked={config.soundEnabled}
-                    onCheckedChange={(checked) => setConfig({ ...config, soundEnabled: checked })}
+                    onCheckedChange={(checked) =>
+                      setConfig({ ...config, soundEnabled: checked })
+                    }
                   />
                   <span>{config.soundEnabled ? "Ativado" : "Desativado"}</span>
                 </div>
@@ -370,20 +442,34 @@ export default function OverlayConfigPage() {
                   <Input
                     id="soundUrl"
                     value={config.soundUrl || ""}
-                    onChange={(e) => setConfig({ ...config, soundUrl: e.target.value })}
+                    onChange={(e) =>
+                      setConfig({ ...config, soundUrl: e.target.value })
+                    }
                     placeholder="https://exemplo.com/som.mp3"
                   />
-                  <p className="text-xs text-muted-foreground">URL para um arquivo de áudio (MP3, WAV, etc.)</p>
+                  <p className="text-xs text-muted-foreground">
+                    URL para um arquivo de áudio (MP3, WAV, etc.)
+                  </p>
                 </div>
               )}
             </TabsContent>
           </Tabs>
 
           <div className="mt-6 flex justify-between">
-            <Button variant="outline" onClick={handleShowPreview}>
+            <Button
+              variant="outline"
+              onClick={handleShowPreview}
+              className="border-violet-500 text-violet-500 hover:bg-violet-50 
+              hover:text-violet-600 transition-colors duration-300 cursor-pointer
+              dark:border-violet-500"
+            >
               Visualizar
             </Button>
-            <Button onClick={handleSaveConfig} disabled={isLoading}>
+            <Button
+              onClick={handleSaveConfig}
+              disabled={isLoading}
+              className="bg-violet-500 hover:bg-violet-600 transition-colors duration-300 cursor-pointer"
+            >
               {isLoading ? "Salvando..." : "Salvar Configurações"}
             </Button>
           </div>
@@ -393,7 +479,9 @@ export default function OverlayConfigPage() {
           <Card className="h-full">
             <CardHeader>
               <CardTitle>Prévia</CardTitle>
-              <CardDescription>Veja como a notificação aparecerá na sua stream.</CardDescription>
+              <CardDescription>
+                Veja como a notificação aparecerá na sua stream.
+              </CardDescription>
             </CardHeader>
             <CardContent className="h-[400px] relative bg-gray-800 rounded-md overflow-hidden">
               {/* Fundo quadriculado para simular transparência */}
@@ -401,7 +489,11 @@ export default function OverlayConfigPage() {
 
               {/* Prévia da notificação */}
               {previewVisible && (
-                <SubscriptionNotification subscriberName="Usuário" planName="Plano Premium" config={config} />
+                <SubscriptionNotification
+                  subscriberName="Usuário"
+                  planName="Plano Premium"
+                  config={config}
+                />
               )}
             </CardContent>
             <CardFooter>
@@ -413,5 +505,5 @@ export default function OverlayConfigPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

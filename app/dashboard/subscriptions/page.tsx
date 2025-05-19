@@ -324,7 +324,8 @@ export default async function SubscriptionsPage() {
                         <Button
                           variant="outline"
                           asChild
-                          className="border-violet-500 text-violet-500 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-300"
+                          className="border-violet-500 text-violet-500 hover:bg-violet-50 
+                          hover:text-violet-600 transition-colors duration-300 dark:border-violet-500"
                         >
                           <Link
                             href={`/dashboard/creator/${subscription.creatorId}`}
