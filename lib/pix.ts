@@ -91,35 +91,6 @@ export async function checkPixPaymentStatus(externalId: string): Promise<"approv
   }
 }
 
-/**
- * Valida uma chave Pix com base no tipo
- *
- * @param pixKey Chave Pix a ser validada
- * @param pixKeyType Tipo da chave Pix
- * @returns Booleano indicando se a chave é válida
- */
-export function validatePixKey(pixKey: string, pixKeyType: PixKeyType): boolean {
-  if (!pixKey || !pixKeyType) return false
-
-  switch (pixKeyType) {
-    case "cpf":
-      // Validação básica de CPF: 11 dígitos numéricos
-      return /^\d{11}$/.test(pixKey)
-
-    case "email":
-      // Validação básica de email
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(pixKey)
-
-    case "telefone":
-      // Validação básica de telefone: +55 seguido de DDD e número
-      // Aceita formatos: +5511999999999 ou 5511999999999
-      return /^(\+55)?\d{10,11}$/.test(pixKey)
-
-    case "aleatoria":
-      // Chave aleatória (EVP) tem 36 caracteres no formato UUID
-      return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(pixKey)
-
-    default:
-      return false
-  }
-}
+// Todas as validações de chave Pix devem ser feitas via '@/lib/validation-utils'.
+// Exemplo de uso:
+// import { isValidPixKey } from '@/lib/validation-utils';
