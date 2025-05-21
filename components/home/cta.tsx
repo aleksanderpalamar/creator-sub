@@ -12,7 +12,7 @@ export const CallToActions = () => {
             </h2>
             <p className="max-w-[900px] md:text-xl/relaxed">
               Comece agora mesmo e receba seu primeiro pagamento em questão de
-              dias.
+              minutos.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-4">
