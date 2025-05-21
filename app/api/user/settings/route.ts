@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { validatePixKey } from "@/lib/pix";
-import type { PixKeyType } from "@/lib/pix";
 import { authOptions } from "@/utils/authOptions";
-import prisma from "@/lib/prisma";
+import { userSettingsSchema } from "@/lib/user-settings-validation";
+import { UserSettingsRepository } from "@/lib/user-settings-repository";
+import { UserSettingsService } from "@/lib/user-settings-service";
 
 export async function PUT(request: Request) {
   try {
@@ -14,51 +14,29 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json();
-    const { pixKey, pixKeyType, isCreator } = body;
 
-    console.log("Atualizando configurações do usuário:", {
-      userId: session.user.id,
-      isCreator,
-    });
+    // Validação com Zod
+    const parseResult = userSettingsSchema.safeParse(body);
 
-    // Validar dados do Pix quando o usuário é criador
-    if (isCreator) {
-      if (!pixKey || !pixKeyType) {
-        return NextResponse.json(
-          {
-            message: "Chave Pix e tipo são obrigatórios para criadores",
-          },
-          { status: 400 }
-        );
-      }
-
-      // Validar a chave Pix com base no tipo
-      if (!validatePixKey(pixKey, pixKeyType as PixKeyType)) {
-        return NextResponse.json(
-          {
-            message: `Chave Pix inválida para o tipo ${pixKeyType}`,
-          },
-          { status: 400 }
-        );
-      }
+    if (!parseResult.success) {
+      return NextResponse.json(
+        {
+          message: parseResult.error.errors
+            .map((e: { message: string }) => e.message)
+            .join(", "),
+        },
+        { status: 400 }
+      );
     }
 
-    // Atualizar o usuário
-    const updatedUser = await prisma.user.update({
-      where: {
-        id: session.user.id,
-      },
-      data: {
-        pixKey,
-        pixKeyType,
-        isCreator,
-      },
-    });
+    const userSettingsRepository = new UserSettingsRepository();
+    const userSettingsService = new UserSettingsService(userSettingsRepository);
 
-    console.log("Usuário atualizado com sucesso:", {
-      id: updatedUser.id,
-      isCreator: updatedUser.isCreator,
-    });
+    // Atualizar configurações do usuário
+    const updatedUser = await userSettingsService.updateUserSettings(
+      session.user.id,
+      parseResult.data
+    );
 
     // Remover a senha do objeto retornado
     const { password: _, ...userWithoutPassword } = updatedUser;
