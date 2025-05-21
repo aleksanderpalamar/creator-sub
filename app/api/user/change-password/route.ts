@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { authOptions } from "@/utils/authOptions";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import { isValidPassword, hashPassword } from "@/lib/validation-utils";
 import bcrypt from "bcrypt";
 
 export async function POST(request: Request) {
@@ -22,14 +23,11 @@ export async function POST(request: Request) {
       );
     }
 
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-    if (!passwordRegex.test(newPassword)) {
+    if (!isValidPassword(newPassword)) {
       return NextResponse.json(
         {
           message:
-            "A nova senha não atende aos requisitos de segurança. Deve conter pelo menos 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial (@$!%*?&).",
+            "A nova senha não atende aos requisitos de segurança. Deve conter pelo menos 8 caracteres, uma letra maiúscula, um número e um caractere especial.",
         },
         { status: 400 }
       );
@@ -65,7 +63,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const hashedPassword = await hashPassword(newPassword);
 
     await prisma.user.update({
       where: {
