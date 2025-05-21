@@ -1,4 +1,6 @@
-import prisma from "@/lib/prisma";
+import { createPlanSchema } from "@/lib/plan-validation";
+import { PlanRepository } from "@/lib/plan-repository";
+import { PlanService } from "@/lib/plan-service";
 import { authOptions } from "@/utils/authOptions";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
@@ -19,23 +21,26 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { name, description, price, benefits } = body;
 
-    if (!name || !price) {
+    // Validação com Zod
+    const parseResult = createPlanSchema.safeParse({
+      ...body,
+      price: Number(body.price), // Garante que price é number
+    });
+
+    if (!parseResult.success) {
       return NextResponse.json(
-        { message: "Nome e preço são obrigatórios." },
+        { message: parseResult.error.errors.map((e: { message: string }) => e.message).join(", ") },
         { status: 400 }
       );
     }
 
-    const plan = await prisma.subscriptionPlan.create({
-      data: {
-        name,
-        description,
-        price,
-        benefits,
-        creatorId: session.user.id,
-      },
+    // Injeção de dependência
+    const planRepository = new PlanRepository();
+    const planService = new PlanService(planRepository);
+    const plan = await planService.createPlan({
+      ...parseResult.data,
+      creatorId: session.user.id,
     });
 
     return NextResponse.json(
