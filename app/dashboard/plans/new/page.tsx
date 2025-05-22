@@ -29,7 +29,14 @@ export default function NewPlanPage() {
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
     const price = Number.parseFloat(formData.get("price") as string);
-    const benefits = formData.get("benefits") as string;
+    // Corrige: transforma benefits em array de strings, separando por linha
+    const benefitsRaw = formData.get("benefits") as string;
+    const benefits = benefitsRaw
+      ? benefitsRaw
+          .split("\n")
+          .map((b) => b.trim())
+          .filter((b) => b.length > 0)
+      : [];
 
     try {
       const response = await fetch("/api/plans", {

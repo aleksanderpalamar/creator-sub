@@ -75,9 +75,6 @@ export default async function DiscoverPage() {
                   <AvatarFallback>{creator.name}</AvatarFallback>
                 </Avatar>
                 <CardTitle>{creator.name}</CardTitle>
-                <CardDescription>
-                  {creator.subscriptionPlans[0]?.name}
-                </CardDescription>
               </CardHeader>
               <CardContent>
                 <p>{creator.subscriptionPlans[0]?.description}</p>

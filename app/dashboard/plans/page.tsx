@@ -14,6 +14,7 @@ import { Edit, PlusCircle } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { DeletePlanButton } from "@/components/delete-plan-button";
 
 export default async function PlansPage() {
   const session = await getServerSession(authOptions);
@@ -99,12 +100,27 @@ export default async function PlansPage() {
                   <div className="mt-4">
                     <h4 className="text-sm font-medium">Benefícios:</h4>
                     <ul className="mt-2 text-sm text-muted-foreground">
-                      {plan.benefits.split("\n").map((benefit, index) => (
-                        <li key={index} className="flex items-center">
-                          <span className="mr-2">•</span>
-                          {benefit}
-                        </li>
-                      ))}
+                      {(() => {
+                        let benefitsArr: string[] = [];
+                        try {
+                          const parsed = JSON.parse(plan.benefits);
+                          if (Array.isArray(parsed)) {
+                            benefitsArr = parsed;
+                          } else if (typeof parsed === "string") {
+                            benefitsArr = parsed.split("\n");
+                          }
+                        } catch {
+                          benefitsArr = plan.benefits.split("\n");
+                        }
+                        return benefitsArr
+                          .filter(Boolean)
+                          .map((benefit, index) => (
+                            <li key={index} className="flex items-center">
+                              <span className="mr-2">•</span>
+                              {benefit}
+                            </li>
+                          ));
+                      })()}
                     </ul>
                   </div>
                 )}
@@ -120,7 +136,8 @@ export default async function PlansPage() {
                     Editar
                   </Link>
                 </Button>
-                {/* <DeletePlanButton id={plan.id} /> */}
+                {/* EditPlanButton />*/}
+                <DeletePlanButton id={plan.id} />
               </CardFooter>
             </Card>
           ))}

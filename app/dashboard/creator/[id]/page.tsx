@@ -131,12 +131,27 @@ export default async function CreatorProfilePage() {
                 <div className="mt-4">
                   <h4 className="text-sm font-medium">Benefícios:</h4>
                   <ul className="mt-2 text-sm text-muted-foreground">
-                    {plan.benefits.split("\n").map((benefit, index) => (
-                      <li key={index} className="flex items-center">
-                        <span className="mr-2">•</span>
-                        {benefit}
-                      </li>
-                    ))}
+                    {(() => {
+                      let benefitsArr: string[] = [];
+                      try {
+                        const parsed = JSON.parse(plan.benefits);
+                        if (Array.isArray(parsed)) {
+                          benefitsArr = parsed;
+                        } else if (typeof parsed === "string") {
+                          benefitsArr = parsed.split("\n");
+                        }
+                      } catch {
+                        benefitsArr = plan.benefits.split("\n");
+                      }
+                      return benefitsArr
+                        .filter(Boolean)
+                        .map((benefit, index) => (
+                          <li key={index} className="flex items-center">
+                            <span className="mr-2">•</span>
+                            {benefit}
+                          </li>
+                        ));
+                    })()}
                   </ul>
                 </div>
               )}
