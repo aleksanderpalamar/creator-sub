@@ -77,7 +77,7 @@ export async function PUT(
     const body = await request.json();
     const { name, description, price, benefits } = body;
 
-    if (!name || price) {
+    if (!name || price == null || price === "") {
       return NextResponse.json(
         { message: "Nome e preco sao obrigatorios." },
         { status: 400 }
@@ -92,7 +92,7 @@ export async function PUT(
         name,
         description,
         price,
-        benefits,
+        benefits: Array.isArray(benefits) ? benefits.join("\n") : benefits,
       },
     });
 

@@ -58,7 +58,8 @@ export function DeletePlanButton({ id }: DeletePlanButtonProps) {
         <Button
           variant="outline"
           size="icon"
-          className="border-rose-500 bg-rose-50 text-rose-500 hover:bg-rose-100 hover:text-rose-600 cursor-pointer"
+          className="border-rose-500 bg-rose-50 text-rose-500 hover:bg-rose-500/20 hover:text-rose-600 cursor-pointer
+          dark:border-rose-500 dark:hover:bg-rose-500/20 transition-colors duration-300"
           title="Deletar plano"
         >
           <Trash className="h-4 w-4" />

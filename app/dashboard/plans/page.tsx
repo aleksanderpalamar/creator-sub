@@ -15,6 +15,7 @@ import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { DeletePlanButton } from "@/components/delete-plan-button";
+import { EditPlanButton } from "@/components/edit-plan-button";
 
 export default async function PlansPage() {
   const session = await getServerSession(authOptions);
@@ -44,7 +45,8 @@ export default async function PlansPage() {
             Planos de Assinatura
           </h1>
           <p className="text-muted-foreground">
-            Gerencie os planos de assinatura disponíveis para os seus criadores.
+            Gerencie os planos de assinatura disponíveis para os seus
+            assinantes.
           </p>
         </div>
         <Button
@@ -126,17 +128,19 @@ export default async function PlansPage() {
                 )}
               </CardContent>
               <CardFooter className="flex justify-between">
-                <Button
-                  variant="outline"
-                  asChild
-                  className="border-violet-500 text-violet-500 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-300 dark:border-violet-500"
-                >
-                  <Link href={`/dashboard/plans/${plan.id}/edit`}>
-                    <Edit className="mr-2 h-4 w-4" />
-                    Editar
-                  </Link>
-                </Button>
-                {/* EditPlanButton />*/}
+                <EditPlanButton
+                  id={plan.id}
+                  name={plan.name}
+                  description={plan.description || ""}
+                  price={plan.price}
+                  benefits={
+                    Array.isArray(plan.benefits)
+                      ? plan.benefits
+                      : typeof plan.benefits === "string"
+                      ? plan.benefits.split("\n").filter(Boolean)
+                      : []
+                  }
+                />
                 <DeletePlanButton id={plan.id} />
               </CardFooter>
             </Card>
