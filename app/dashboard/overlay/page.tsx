@@ -190,10 +190,11 @@ export default function OverlayConfigPage() {
       <div className="grid gap-6 grid-cols-2 md:grid-cols-1">
         <div>
           <Tabs defaultValue="appearance">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="appearance">Aparência</TabsTrigger>
               <TabsTrigger value="text">Texto</TabsTrigger>
               <TabsTrigger value="behavior">Comportamento</TabsTrigger>
+              <TabsTrigger value="discord">Discord</TabsTrigger>
             </TabsList>
 
             <TabsContent value="appearance" className="space-y-4 pt-4">
@@ -451,6 +452,149 @@ export default function OverlayConfigPage() {
                     URL para um arquivo de áudio (MP3, WAV, etc.)
                   </p>
                 </div>
+              )}
+            </TabsContent>
+
+            <TabsContent value="discord" className="space-y-4 pt-4">
+              <div className="space-y-2">
+                <Label htmlFor="discordEnabled">Integração com Discord</Label>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="discordEnabled"
+                    checked={config.discordEnabled}
+                    onCheckedChange={(checked) =>
+                      setConfig({ ...config, discordEnabled: checked })
+                    }
+                  />
+                  <span>
+                    {config.discordEnabled ? "Ativado" : "Desativado"}
+                  </span>
+                </div>
+              </div>
+
+              {config.discordEnabled && (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="discordChannelId">ID do Canal</Label>
+                    <div className="flex items-center space-x-2">
+                      <Input
+                        id="discordChannelId"
+                        value={config.discordChannelId || ""}
+                        onChange={(e) =>
+                          setConfig({
+                            ...config,
+                            discordChannelId: e.target.value,
+                          })
+                        }
+                        placeholder="000000000000000000"
+                      />
+                      <Button
+                        variant="outline"
+                        onClick={async () => {
+                          if (!config.discordChannelId) {
+                            toast.error({
+                              title: "Erro",
+                              description: "Digite o ID do canal primeiro",
+                            });
+                            return;
+                          }
+                          try {
+                            console.log(
+                              "Testando conexão com canal:",
+                              config.discordChannelId
+                            );
+                            const response = await fetch(
+                              `/api/overlay/discord?channelId=${config.discordChannelId}`
+                            );
+
+                            if (!response.ok) {
+                              const errorText = await response.text();
+                              console.error("Erro na resposta:", {
+                                status: response.status,
+                                statusText: response.statusText,
+                                error: errorText,
+                              });
+                              throw new Error(
+                                `Falha ao conectar: ${errorText}`
+                              );
+                            }
+
+                            console.log("Conexão estabelecida com sucesso");
+                            toast.success({
+                              title: "Sucesso",
+                              description: "Conexão com Discord estabelecida!",
+                            });
+                          } catch (error) {
+                            console.error("Erro detalhado:", error);
+                            let errorMessage = "Erro desconhecido";
+                            if (error instanceof Error) {
+                              errorMessage = error.message;
+                            } else if (typeof error === "string") {
+                              errorMessage = error;
+                            }
+                            toast.error({
+                              title: "Erro",
+                              description: `Falha ao conectar com o Discord: ${errorMessage}`,
+                            });
+                          }
+                        }}
+                      >
+                        Testar Conexão
+                      </Button>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      ID do canal de texto do Discord que será exibido no
+                      overlay
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="discordChatHeight">Altura do Chat</Label>
+                    <Input
+                      id="discordChatHeight"
+                      value={config.discordChatHeight || "400px"}
+                      onChange={(e) =>
+                        setConfig({
+                          ...config,
+                          discordChatHeight: e.target.value,
+                        })
+                      }
+                      placeholder="400px"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Altura da área do chat do Discord no overlay (ex: 400px,
+                      50vh)
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="discordMessageLimit">
+                      Limite de Mensagens
+                    </Label>
+                    <div className="flex items-center space-x-4">
+                      <Slider
+                        id="discordMessageLimit"
+                        min={5}
+                        max={50}
+                        step={5}
+                        value={[config.discordMessageLimit || 25]}
+                        onValueChange={(value) =>
+                          setConfig({
+                            ...config,
+                            discordMessageLimit: value[0],
+                          })
+                        }
+                        className="flex-1"
+                      />
+                      <span className="w-12 text-center">
+                        {config.discordMessageLimit || 25}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Número máximo de mensagens exibidas simultaneamente
+                    </p>
+                  </div>
+                </>
               )}
             </TabsContent>
           </Tabs>

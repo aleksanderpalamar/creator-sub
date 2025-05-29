@@ -1,6 +1,7 @@
 "use client";
 
 import { SubscriptionNotification } from "@/components/overlay/subscription-notification";
+import { DiscordChat } from "@/components/overlay/discord-chat";
 import { OverlayConfig } from "@/types/overlay";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -94,6 +95,7 @@ export default function OverlayPage() {
           config={config}
         />
       )}
+      {config && <DiscordChat config={config} />}
     </div>
   );
 }

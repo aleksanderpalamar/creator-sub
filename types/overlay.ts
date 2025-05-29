@@ -16,4 +16,10 @@ export interface OverlayConfig {
   displayDuration?: number
   soundEnabled?: boolean
   soundUrl?: string
+
+  // Discord Integration Settings
+  discordEnabled?: boolean
+  discordChannelId?: string
+  discordChatHeight?: string
+  discordMessageLimit?: number
 }

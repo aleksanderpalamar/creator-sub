@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   description: "Plataforma de assinaturas para criadores de conteúdo",
 };
 
+// Initialize Discord bot
+import "@/lib/discord-init";
+
 export default function RootLayout({
   children,
 }: Readonly<{
