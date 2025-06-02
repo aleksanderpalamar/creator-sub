@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -28,6 +27,7 @@ import { useToast } from "@/hooks/use-toast";
 import type { OverlayConfig } from "@/types/overlay";
 import { SubscriptionNotification } from "@/components/overlay/subscription-notification";
 import { Copy, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function OverlayConfigPage() {
   const { data: session } = useSession();
@@ -148,9 +148,8 @@ export default function OverlayConfigPage() {
     return <div>Carregando...</div>;
   }
 
-  const overlayUrl = `${
-    typeof window !== "undefined" ? window.location.origin : ""
-  }/overlay/${session.user.id}`;
+  const overlayUrl = `${typeof window !== "undefined" ? window.location.origin : ""
+    }/overlay/${session.user.id}`;
 
   return (
     <div className="space-y-6">
@@ -490,6 +489,7 @@ export default function OverlayConfigPage() {
                       />
                       <Button
                         variant="outline"
+                        className="border-emerald-500 text-emerald-500 hover:bg-emerald-50 hover:text-emerald-600 transition-colors duration-300 cursor-pointer"
                         onClick={async () => {
                           if (!config.discordChannelId) {
                             toast.error({
@@ -499,10 +499,7 @@ export default function OverlayConfigPage() {
                             return;
                           }
                           try {
-                            console.log(
-                              "Testando conexão com canal:",
-                              config.discordChannelId
-                            );
+                            console.log("Testando conexão com canal:", config.discordChannelId);
                             const response = await fetch(
                               `/api/overlay/discord?channelId=${config.discordChannelId}`
                             );
@@ -514,9 +511,7 @@ export default function OverlayConfigPage() {
                                 statusText: response.statusText,
                                 error: errorText,
                               });
-                              throw new Error(
-                                `Falha ao conectar: ${errorText}`
-                              );
+                              throw new Error(`Falha ao conectar: ${errorText}`);
                             }
 
                             console.log("Conexão estabelecida com sucesso");
@@ -541,10 +536,27 @@ export default function OverlayConfigPage() {
                       >
                         Testar Conexão
                       </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          const clientId = process.env
+                            .NEXT_PUBLIC_DISCORD_CLIENT_ID as string;
+                          const permissions = process.env.ADMISTRATOR_DISCORD_ID as string;
+                          const inviteUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&permissions=${permissions}&scope=bot`;
+                          window.open(inviteUrl, "_blank", "noopener");
+                        }}
+                        className="border-violet-500 text-violet-500 hover:bg-violet-50 hover:text-violet-600 transition-colors duration-300 cursor-pointer"
+                      >
+                        Adicionar Bot ao Discord
+                      </Button>
                     </div>
                     <p className="text-xs text-muted-foreground">
                       ID do canal de texto do Discord que será exibido no
                       overlay
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Para usar a integração, adicione o bot Creator Sub ao seu
+                      servidor Discord.
                     </p>
                   </div>
 
