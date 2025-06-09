@@ -1,11 +1,11 @@
 "use client";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
-export default function ActivatePage() {
+function ActivateForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { toast } = useToast();
@@ -70,10 +70,18 @@ export default function ActivatePage() {
             disabled={loading}
             className="w-full bg-violet-500 text-violet-50 hover:bg-violet-600 transition-colors duration-300 cursor-pointer"
         >
-                {loading ? "Ativando..." : "Ativar conta"}
+            {loading ? "Ativando..." : "Ativar conta"}
         </Button>
         {error && <div className="border-rose-500 bg-rose-50 rounded-lg text-rose-500 text-sm">{error}</div>}
       </form>
     </div>
+  );
+}
+
+export default function ActivatePage() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <ActivateForm />
+    </Suspense>
   );
 }
