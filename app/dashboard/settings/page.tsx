@@ -30,6 +30,7 @@ import { Separator } from "@/components/ui/separator";
 import { AlertCircle, Eye, EyeOff } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Link from "next/link";
+import { DeleteAccountButton } from "@/components/delete-account-button";
 
 export default function SettingsPage() {
   const { data: session, update } = useSession();
@@ -445,6 +446,17 @@ export default function SettingsPage() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <div className="border-t border-border pt-6">
+        <h2 className="text-xl font-semibold mb-4">Zona Perigosa</h2>
+        <div className="max-w-md">
+          <DeleteAccountButton />
+          <p className="text-sm text-muted-foreground mt-2">
+            Ao excluir sua conta, todos os seus dados serão permanentemente removidos.
+            Esta ação não pode ser desfeita.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
