@@ -45,3 +45,21 @@ export function removeConnection(
     }
   }
 }
+
+export async function sendActivationEmail({
+  email,
+  name,
+  token,
+}: {
+  email: string;
+  name: string;
+  token: string;
+}) {
+  // Implementar aqui a lógica real de envio de e-mail
+  // Exemplo: usando nodemailer, resend, etc.
+  const activationUrl = `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/register/activate?token=${token}`;
+  console.log(
+    `Enviar e-mail de ativação para ${email} com o link: ${activationUrl}`
+  );
+  // integrar com serviço de e-mail
+}

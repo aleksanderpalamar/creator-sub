@@ -13,16 +13,16 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 
 export default function RegisterPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isCreator, setIsCreator] = useState(false);
+  const [acceptTerms, setAcceptTerms] = useState(false);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -34,7 +34,7 @@ export default function RegisterPage() {
     const password = formData.get("password") as string;
 
     try {
-      const response = await fetch("/api/register", {
+      const response = await fetch("/api/register/request-activation", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,20 +53,10 @@ export default function RegisterPage() {
       }
 
       toast({
-        title: "Conta criada com sucesso",
-        description: "Você será redirecionado para o login",
+        title: "Verifique seu e-mail",
+        description: "Enviamos um link de ativação para sua caixa de entrada.",
         type: "success",
       });
-
-      // Login automático após registro
-      await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
-
-      router.push("/dashboard");
-      router.refresh();
     } catch (error: any) {
       console.error(error);
       toast({
@@ -128,10 +118,36 @@ export default function RegisterPage() {
                 Sou um criador de conteúdo
               </label>
             </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="acceptTerms"
+                checked={acceptTerms}
+                onCheckedChange={(checked) => setAcceptTerms(checked as boolean)}
+                required
+              />
+              <label htmlFor="acceptTerms" className="text-xs">
+                Li e aceito os{" "}
+                <a
+                  href="/termos"
+                  target="_blank"
+                  className="underline text-violet-500"
+                >
+                  Termos de Uso
+                </a>{" "}
+                e a{" "}
+                <a
+                  href="/privacidade"
+                  target="_blank"
+                  className="underline text-violet-500"
+                >
+                  Política de Privacidade
+                </a>
+              </label>
+            </div>
             <Button
               type="submit"
               className="w-full bg-violet-500 hover:bg-violet-600 transition-colors duration-300 cursor-pointer"
-              disabled={isLoading}
+              disabled={isLoading || !acceptTerms}
             >
               {isLoading ? "Registrando..." : "Registrar"}
             </Button>
