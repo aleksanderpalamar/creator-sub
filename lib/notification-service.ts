@@ -6,7 +6,7 @@ const connections = new Map<
   Set<ReadableStreamController<Uint8Array>>
 >();
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
 
 // Função para enviar notificação para um criador específico
 export async function notifySubscription(creatorId: string, data: any) {
