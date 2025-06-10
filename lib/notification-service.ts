@@ -63,7 +63,7 @@ export async function sendActivationEmail({
     const activationUrl = `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/register/activate?token=${token}`;
     
     await resend.emails.send({
-      from: 'CreatorSub <noreply@creatorsub.com>',
+      from: 'CreatorSub <noreply@aleksanderpalamar.dev>',
       to: email,
       subject: 'Ative sua conta no CreatorSub',
       html: `
