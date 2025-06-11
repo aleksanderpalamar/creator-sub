@@ -29,6 +29,8 @@ export async function POST(request: Request) {
         email,
         password: hashedPassword,
         isCreator: !!isCreator,
+        // Se estiver em desenvolvimento, já marca o email como verificado
+        emailVerified: process.env.NODE_ENV === "development" ? new Date() : null,
         accounts: {
           create: {
             type: "credentials",
@@ -39,7 +41,15 @@ export async function POST(request: Request) {
       },
     });
 
-    // Cria o token de verificação
+    // Se estiver em desenvolvimento, retorna sucesso imediatamente
+    if (process.env.NODE_ENV === "development") {
+      return NextResponse.json({ 
+        message: "Conta criada com sucesso! Em ambiente de desenvolvimento, a ativação é automática.",
+        redirectTo: "/login"
+      }, { status: 200 });
+    }
+
+    // Em produção, continua com o fluxo normal de ativação
     const token = randomBytes(32).toString("hex");
     const expires = addMinutes(new Date(), 30); // 30 minutos de validade
     await prisma.verificationToken.create({
