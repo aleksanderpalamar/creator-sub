@@ -25,9 +25,9 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import type { OverlayConfig } from "@/types/overlay";
-import { SubscriptionNotification } from "@/components/overlay/subscription-notification";
 import { Copy, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PreviewNotification } from "@/components/overlay/preview-notification";
 
 export default function OverlayConfigPage() {
   const { data: session } = useSession();
@@ -49,7 +49,6 @@ export default function OverlayConfigPage() {
     soundEnabled: false,
     soundUrl: "",
   });
-  const [previewVisible, setPreviewVisible] = useState(false);
   const [configFetched, setConfigFetched] = useState(false);
 
   useEffect(() => {
@@ -126,13 +125,6 @@ export default function OverlayConfigPage() {
     }
   };
 
-  const handleShowPreview = () => {
-    setPreviewVisible(true);
-    setTimeout(() => {
-      setPreviewVisible(false);
-    }, (config.displayDuration || 5) * 1000);
-  };
-
   const copyOverlayUrl = () => {
     if (!session?.user?.id) return;
 
@@ -188,6 +180,7 @@ export default function OverlayConfigPage() {
 
       <div className="grid gap-6 grid-cols-2 md:grid-cols-1">
         <div>
+          {/* Configurações do overlay */}
           <Tabs defaultValue="appearance">
             <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="appearance">Aparência</TabsTrigger>
@@ -611,16 +604,7 @@ export default function OverlayConfigPage() {
             </TabsContent>
           </Tabs>
 
-          <div className="mt-6 flex justify-between">
-            <Button
-              variant="outline"
-              onClick={handleShowPreview}
-              className="border-violet-500 text-violet-500 hover:bg-violet-50 
-              hover:text-violet-600 transition-colors duration-300 cursor-pointer
-              dark:border-violet-500"
-            >
-              Visualizar
-            </Button>
+          <div className="mt-6 flex justify-end">
             <Button
               onClick={handleSaveConfig}
               disabled={isLoading}
@@ -631,6 +615,7 @@ export default function OverlayConfigPage() {
           </div>
         </div>
 
+        {/* Área de prévia */}
         <div className="relative">
           <Card className="h-full">
             <CardHeader>
@@ -639,24 +624,15 @@ export default function OverlayConfigPage() {
                 Veja como a notificação aparecerá na sua stream.
               </CardDescription>
             </CardHeader>
-            <CardContent className="h-[400px] relative bg-gray-800 rounded-md overflow-hidden">
+            <CardContent className="relative h-[400px] rounded-md overflow-hidden" style={{ backgroundColor: "#0c0c0c" }}>
               {/* Fundo quadriculado para simular transparência */}
               <div className="absolute inset-0 bg-[url('/checkerboard.png')] bg-repeat opacity-10"></div>
 
-              {/* Prévia da notificação */}
-              {previewVisible && (
-                <SubscriptionNotification
-                  subscriberName="Usuário"
-                  planName="Plano Premium"
-                  config={config}
-                />
-              )}
+              {/* Container de preview que ocupa toda a área */}
+              <div className="absolute inset-0">
+                <PreviewNotification config={config} />
+              </div>
             </CardContent>
-            <CardFooter>
-              <p className="text-sm text-muted-foreground">
-                Clique em "Visualizar" para ver como a notificação aparecerá.
-              </p>
-            </CardFooter>
           </Card>
         </div>
       </div>
