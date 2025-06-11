@@ -52,11 +52,18 @@ export default function RegisterPage() {
         throw new Error(data.message || "Erro ao registrar");
       }
 
+      const data = await response.json();
+
       toast({
-        title: "Verifique seu e-mail",
-        description: "Enviamos um link de ativação para sua caixa de entrada.",
+        title: "Sucesso!",
+        description: data.message,
         type: "success",
       });
+
+      // Se tiver redirectTo na resposta, redireciona para a página especificada
+      if (data.redirectTo) {
+        router.push(data.redirectTo);
+      }
     } catch (error: any) {
       console.error(error);
       toast({
